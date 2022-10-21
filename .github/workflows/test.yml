@@ -1,0 +1,36 @@
+# Syntax: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
+name: test
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_14.0.1.app/Contents/Developer
+  
+jobs:
+  swiftlint:
+    runs-on: macos-12
+    steps:
+      - name: Repository Checkout
+        uses: actions/checkout@v3
+          
+      - name: Run SwiftLint 
+        run: swiftlint
+
+  test:
+    runs-on: macos-12
+    timeout-minutes: 30
+    needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
+    steps:
+      - name: Prestart the simulator # https://circleci.com/docs/2.0/testing-ios/#pre-starting-the-simulator
+        # 🧐 when changing below, don't forget to also change the device name in the Fastfile too: 
+        run: | 
+          xcrun simctl boot "iPhone 14" || true
+      
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Run iOS tests
+        run: xcodebuild test -scheme RDOModules-Package -destination 'platform=iOS Simulator,OS=16.0,name=iPhone 14'
