@@ -2,7 +2,7 @@
 
 This package contains:
 
-- [Lunh Check](/Sources/LunhCheck/LunhCheck.md) for validating tokens
+- [Luhn Check](/Sources/LuhnCheck/LuhnCheck.md) for validating tokens
 - QRGenerator to assist creating a QR-code (todo)
 - OIDC (todo)
 - HTTP Security (todo)
