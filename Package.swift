@@ -10,8 +10,8 @@ let package = Package(
 	],
 	products: [
 		.library(
-			name: "LunhCheck",
-			targets: ["LunhCheck"]),
+			name: "LuhnCheck",
+			targets: ["LuhnCheck"]),
 		.library(
 			name: "QRGenerator",
 			targets: ["QRGenerator"])
@@ -19,11 +19,11 @@ let package = Package(
 	dependencies: [],
 	targets: [
 		.target(
-			name: "LunhCheck",
+			name: "LuhnCheck",
 			dependencies: []),
 		.testTarget(
-			name: "LunhCheckTests",
-			dependencies: ["LunhCheck"]),
+			name: "LuhnCheckTests",
+			dependencies: ["LuhnCheck"]),
 		.target(
 			name: "QRGenerator",
 			dependencies: [])
