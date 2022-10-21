@@ -6,7 +6,7 @@
 */
 
 import XCTest
-@testable import LunhCheck
+@testable import LuhnCheck
 
 class LuhnCheckTests: XCTestCase {
 
