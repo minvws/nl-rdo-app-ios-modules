@@ -14,7 +14,7 @@ let package = Package(
 			targets: ["LunhCheck"]),
 		.library(
 			name: "QRGenerator",
-			targets: ["QRGenerator"]),
+			targets: ["QRGenerator"])
 	],
 	dependencies: [],
 	targets: [
@@ -26,6 +26,6 @@ let package = Package(
 			dependencies: ["LunhCheck"]),
 		.target(
 			name: "QRGenerator",
-			dependencies: []),
+			dependencies: [])
 	]
 )
