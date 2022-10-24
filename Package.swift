@@ -26,6 +26,9 @@ let package = Package(
 			dependencies: ["LuhnCheck"]),
 		.target(
 			name: "QRGenerator",
-			dependencies: [])
+			dependencies: []),
+		.testTarget(
+			name: "QRGeneratorTests",
+			dependencies: ["QRGenerator"]),
 	]
 )
