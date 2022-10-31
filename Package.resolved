@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "appauth-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Rool/AppAuth-iOS.git",
+      "state" : {
+        "branch" : "feature/custom-url-support",
+        "revision" : "46e9b6d35d365066b3d8b7cf86672fc68451a09b"
+      }
+    }
+  ],
+  "version" : 2
+}

@@ -4,7 +4,7 @@ This package contains:
 
 - [Luhn Check](/Sources/LuhnCheck/LuhnCheck.md) for validating tokens
 - [QRGenerator](/Sources/QRGenerator/QRGenerator.md) to assist creating a QR-code
-- OIDC (todo)
+- [OpenIDConnect](/Sources/OpenIDConnect/OpenIDConnect.md) to assist connecting to OpenID
 - HTTP Security (todo)
 
 ## Installation
@@ -13,7 +13,7 @@ This package contains:
 
 The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler.
 
-Once you have your Swift package set up, adding Alamofire as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
+Once you have your Swift package set up, adding RDO Modules as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
 
 ```swift
 dependencies: [

@@ -14,9 +14,19 @@ let package = Package(
 			targets: ["LuhnCheck"]),
 		.library(
 			name: "QRGenerator",
-			targets: ["QRGenerator"])
+			targets: ["QRGenerator"]),
+		.library(
+			name: "OpenIDConnect",
+			targets: ["OpenIDConnect"])
 	],
-	dependencies: [],
+	dependencies: [
+		.package(
+			// A fork has been used to support both universal links and url schemes
+			// Forked from: https://github.com/openid/AppAuth-iOS
+			url: "https://github.com/Rool/AppAuth-iOS.git",
+			branch: "feature/custom-url-support"
+		)
+	],
 	targets: [
 		.target(
 			name: "LuhnCheck",
@@ -30,5 +40,11 @@ let package = Package(
 		.testTarget(
 			name: "QRGeneratorTests",
 			dependencies: ["QRGenerator"]),
+		.target(
+			name: "OpenIDConnect",
+			dependencies: [.product(name: "AppAuth", package: "AppAuth-iOS")]),
+		.testTarget(
+			name: "OpenIDConnectTests",
+			dependencies: ["OpenIDConnect"])
 	]
 )
