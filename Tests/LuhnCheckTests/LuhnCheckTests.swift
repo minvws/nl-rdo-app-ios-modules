@@ -45,13 +45,13 @@ class LuhnCheckTests: XCTestCase {
 	func test_luhnNChecksum_withInvalidTokens() {
 
 		// Given
-		let validTokens: [String] = [
+		let invalidTokens: [String] = [
 			"2SX4XLGGXUB6V84",
 			"YL8BSX9T6J39C7L",
 			"SGF25J4TBTY"
 		]
 
-		for token in validTokens {
+		for token in invalidTokens {
 
 			// When
 			let result = sut.luhnModN(token)
@@ -64,12 +64,12 @@ class LuhnCheckTests: XCTestCase {
 	func test_luhnNChecksum_withInvalidChars() {
 
 		// Given
-		let validTokens: [String] = [
+		let invalidCharTokens: [String] = [
 			"2SPW782",
 			"SGF25J4TBTA"
 		]
 
-		for token in validTokens {
+		for token in invalidCharTokens {
 
 			// When
 			let result = sut.luhnModN(token)
