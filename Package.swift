@@ -25,7 +25,8 @@ let package = Package(
 			// Forked from: https://github.com/openid/AppAuth-iOS
 			url: "https://github.com/Rool/AppAuth-iOS.git",
 			branch: "feature/custom-url-support"
-		)
+		),
+		.package(url: "https://github.com/AliSoftware/OHHTTPStubs.git", from: "9.0.0")
 	],
 	targets: [
 		.target(
@@ -45,6 +46,7 @@ let package = Package(
 			dependencies: [.product(name: "AppAuth", package: "AppAuth-iOS")]),
 		.testTarget(
 			name: "OpenIDConnectTests",
-			dependencies: ["OpenIDConnect"])
+			dependencies: ["OpenIDConnect", "OHHTTPStubs", .product(name: "OHHTTPStubsSwift", package: "OHHTTPStubs")]
+		)
 	]
 )

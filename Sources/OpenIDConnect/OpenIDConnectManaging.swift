@@ -18,6 +18,7 @@ public protocol OpenIDConnectManaging: AnyObject {
 	func requestAccessToken(
 		issuerConfiguration: OpenIDConnectConfiguration,
 		presentingViewController: UIViewController?,
+		openIDConnectState: OpenIDConnectState?,
 		onCompletion: @escaping (OpenIDConnectToken) -> Void,
 		onError: @escaping (Error?) -> Void)
 }

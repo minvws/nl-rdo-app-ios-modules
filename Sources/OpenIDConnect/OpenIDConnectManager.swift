@@ -20,6 +20,7 @@ public class OpenIDConnectManager: OpenIDConnectManaging {
 	public func requestAccessToken(
 		issuerConfiguration: OpenIDConnectConfiguration,
 		presentingViewController: UIViewController?,
+		openIDConnectState: OpenIDConnectState? = UIApplication.shared.delegate as? OpenIDConnectState,
 		onCompletion: @escaping (OpenIDConnectToken) -> Void,
 		onError: @escaping (Error?) -> Void) {
 			
@@ -30,6 +31,7 @@ public class OpenIDConnectManager: OpenIDConnectManaging {
 							issuerConfiguration: issuerConfiguration,
 							serviceConfiguration: serviceConfiguration,
 							presentingViewController: presentingViewController,
+							openIDConnectState: openIDConnectState,
 							onCompletion: onCompletion,
 							onError: onError
 						)
@@ -44,6 +46,7 @@ public class OpenIDConnectManager: OpenIDConnectManaging {
 		issuerConfiguration: OpenIDConnectConfiguration,
 		serviceConfiguration: OIDServiceConfiguration,
 		presentingViewController: UIViewController?,
+		openIDConnectState: OpenIDConnectState?,
 		onCompletion: @escaping (OpenIDConnectToken) -> Void,
 		onError: @escaping (Error?) -> Void) {
 			
@@ -52,7 +55,7 @@ public class OpenIDConnectManager: OpenIDConnectManaging {
 				serviceConfiguration: serviceConfiguration
 			)
 			
-			if let appAuthState = UIApplication.shared.delegate as? OpenIDConnectState {
+			if let openIDConnectState {
 				
 				if #unavailable(iOS 13) {
 					NotificationCenter.default.post(name: .launchingOpenIDConnectBrowser, object: nil)
@@ -72,13 +75,13 @@ public class OpenIDConnectManager: OpenIDConnectManaging {
 				}
 				
 				if let presentingViewController {
-					appAuthState.currentAuthorizationFlow = OIDAuthState.authState(
+					openIDConnectState.currentAuthorizationFlow = OIDAuthState.authState(
 						byPresenting: request,
 						presenting: presentingViewController,
 						callback: callBack
 					)
 				} else {
-					appAuthState.currentAuthorizationFlow = OIDAuthState.authState(
+					openIDConnectState.currentAuthorizationFlow = OIDAuthState.authState(
 						byPresenting: request,
 						externalUserAgent: OIDExternalUserAgentIOSCustomBrowser.defaultBrowser() ?? OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari(),
 						callback: callBack
