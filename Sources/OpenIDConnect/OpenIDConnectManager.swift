@@ -15,8 +15,10 @@ public class OpenIDConnectManager: OpenIDConnectManaging {
 	/// Request an access token
 	/// - Parameters:
 	///   - issuerConfiguration: openID configuration
-	///   - onCompletion: ompletion handler with optional access token
-	///   - onError: error handler
+	///   - presentingViewController: an optional view controller that presents the authentication view
+	///   - openIDConnectState: the state of the current connection
+	///   - onCompletion: completion handler with the access token
+	///   - onError: the error handler
 	public func requestAccessToken(
 		issuerConfiguration: OpenIDConnectConfiguration,
 		presentingViewController: UIViewController?,

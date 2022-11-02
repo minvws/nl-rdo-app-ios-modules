@@ -8,6 +8,15 @@
         "branch" : "feature/custom-url-support",
         "revision" : "46e9b6d35d365066b3d8b7cf86672fc68451a09b"
       }
+    },
+    {
+      "identity" : "ohhttpstubs",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AliSoftware/OHHTTPStubs.git",
+      "state" : {
+        "revision" : "12f19662426d0434d6c330c6974d53e2eb10ecd9",
+        "version" : "9.1.0"
+      }
     }
   ],
   "version" : 2

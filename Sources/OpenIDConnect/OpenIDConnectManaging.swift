@@ -12,9 +12,11 @@ public protocol OpenIDConnectManaging: AnyObject {
 	
 	/// Request an access token
 	/// - Parameters:
-	///   - configuration: openID configuration
-	///   - onCompletion: ompletion handler with optional access token
-	///   - onError: error handler
+	///   - issuerConfiguration: openID configuration
+	///   - presentingViewController: an optional view controller that presents the authentication view
+	///   - openIDConnectState: the state of the current connection
+	///   - onCompletion: completion handler with the access token
+	///   - onError: the error handler
 	func requestAccessToken(
 		issuerConfiguration: OpenIDConnectConfiguration,
 		presentingViewController: UIViewController?,
