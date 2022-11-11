@@ -10,6 +10,9 @@ let package = Package(
 	],
 	products: [
 		.library(
+			name: "Logging",
+			targets: ["Logging"]),
+		.library(
 			name: "LuhnCheck",
 			targets: ["LuhnCheck"]),
 		.library(
@@ -28,6 +31,10 @@ let package = Package(
 		)
 	],
 	targets: [
+		.target(
+			name: "Logging",
+			dependencies: [],
+			exclude: ["user-defined-settings.png"]),
 		.target(
 			name: "LuhnCheck",
 			dependencies: []),
