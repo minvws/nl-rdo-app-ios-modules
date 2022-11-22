@@ -178,49 +178,25 @@ if AlwaysAllowSignatureValidator().validate(signature: signature, content: conte
 
 Another implementation of the SignatureValidation Protocol is the `CMSSignatureValidator`, based upon the [Cryptographic Message Syntax](https://en.wikipedia.org/wiki/Cryptographic_Message_Syntax). Just as with the TLS certificate, we are very carefull with which certificates we accept for signatures. 
 
+You can tighten or relax the check with the optional commonName,  authority key identifier, the optional subject key identifier and the optional serial number of the x509 certificate. 
+
+Be careful with the commonName check, it is easy to spoof if you forget the leading dot in the name. (A malicious hacker can create a certificate with the domain *evilhackerYOURDOMAIN*, not *evilhacker.YOURDOMAIN*)
+
 ```swift
 import HTTPSecurity
 
 let sdNRootCAG3String = """
 -----BEGIN CERTIFICATE-----
 MIIFdDCCA1ygAwIBAgIEAJiiOTANBgkqhkiG9w0BAQsFADBaMQswCQYDVQQGEwJO
-TDEeMBwGA1UECgwVU3RhYXQgZGVyIE5lZGVybGFuZGVuMSswKQYDVQQDDCJTdGFh
-dCBkZXIgTmVkZXJsYW5kZW4gUm9vdCBDQSAtIEczMB4XDTEzMTExNDExMjg0MloX
-DTI4MTExMzIzMDAwMFowWjELMAkGA1UEBhMCTkwxHjAcBgNVBAoMFVN0YWF0IGRl
-ciBOZWRlcmxhbmRlbjErMCkGA1UEAwwiU3RhYXQgZGVyIE5lZGVybGFuZGVuIFJv
-b3QgQ0EgLSBHMzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAL4yolQP
-cPssXFnrbMSkUeiFKrPMSjTysF/zDsccPVMeiAho2G89rcKezIJnByeHaHE6n3WW
-IkYFsO2tx1ueKt6c/DrGlaf1F2cY5y9JCAxcz+bMNO14+1Cx3Gsy8KL+tjzk7FqX
-xz8ecAgwoNzFs21v0IJyEavSgWhZghe3eJJg+szeP4TrjTgzkApyI/o1zCZxMdFy
-KJLZWyNtZrVtB0LrpjPOktvA9mxjeM3KTj215VKb8b475lRgsGYeCasH/lSJEULR
-9yS6YHgamPfJEf0WwTUaVHXvQ9Plrk7O53vDxk5hUUurmkVLoR9BvUhTFXFkC4az
-5S6+zqQbwSmEorXLCCN2QyIkHxcE1G6cxvx/K2Ya7Irl1s9N9WMJtxU51nus6+N8
-6U78dULI7ViVDAZCopz35HCz33JvWjdAidiFpNfxC95DGdRKWCyMijmev4SH8RY7
-Ngzp07TKbBlBUgmhHbBqv4LvcFEhMtwFdozL92TkA1CvjJFnq8Xy7ljY3r735zHP
-bMk7ccHViLVlvMDoFxcHErVc0qsgk7TmgoNwNsXNo42ti+yjwUOH5kPiNL6VizXt
-BznaqB16nzaeErAMZRKQFWDZJkBE41ZgpRDUajz9QdwOWke275dhdU/Z/seyHdTt
-XUmzqWrLZoQT1Vyg3N9udwbRcXXIV2+vD3dbAgMBAAGjQjBAMA8GA1UdEwEB/wQF
-MAMBAf8wDgYDVR0PAQH/BAQDAgEGMB0GA1UdDgQWBBRUrfrHkleuyjWcLhL75Lpd
-INyUVzANBgkqhkiG9w0BAQsFAAOCAgEAMJmdBTLIXg47mAE6iqTnB/d6+Oea31BD
-U5cqPco8R5gu4RV78ZLzYdqQJRZlwJ9UXQ4DO1t3ApyEtg2YXzTdO2PCwyiBwpwp
-LiniyMMB8jPqKqrMCQj3ZWfGzd/TtiunvczRDnBfuCPRy5FOCvTIeuXZYzbB1N/8
-Ipf3YF3qKS9Ysr1YvY2WTxB1v0h7PVGHoTx0IsL8B3+A3MSs/mrBcDCw6Y5p4ixp
-gZQJut3+TcCDjJRYwEYgr5wfAvg1VUkvRtTA8KCWAg8zxXHzniN9lLf9OtMJgwYh
-/WA9rjLA0u6NpvDntIJ8CsxwyXmA+P5M9zWEGYox+wrZ13+b8KKaa8MFSu1BYBQw
-0aoRQm7TIwIEC8Zl3d1Sd9qBa7Ko+gE4uZbqKmxnl4mUnrzhVNXkanjvSr0rmj1A
-fsbAddJu+2gw7OyLnflJNZoaLNmzlTnVHpL3prllL+U9bTpITAjc5CgSKL59NVzq
-4BZ+Extq1z7XnvwtdbLBFNUjA9tbbws+eC8N3jONFrdI54OagQ97wUNNVQQXOEpR
-1VmiiXTTn74eS9fGbbeIJG9gkaSChVtWQbzQRKtqE77RLFi3EjNYsjdj3BP1lB0/
-QFH1T/U67cjF68IeHRaVesd+QnGTbksVtzDfqu1XhUisHWrdOWnk4Xl4vs4Fv6EM
+....
 94B7IWcnMFk=
 -----END CERTIFICATE-----
 """
-
 let trustedSigner: SigningCertificate = SigningCertificate(
-   name: "Staat der Nederlanden Root CA - G3", 
-   certificate: sdNRootCAG3String, 
-   commonName: ".rdobeheer.nl", 
-		authorityKeyIdentifier: nil,
+    name: "Staat der Nederlanden Root CA - G3", 
+    certificate: sdNRootCAG3String, 
+    commonName: ".rdobeheer.nl", 
+    authorityKeyIdentifier: nil,
 		subjectKeyIdentifier: Data([0x04, 0x14, /* keyID starts here: */ 0x54, 0xAD, 0xFA, 0xC7, 0x92, 0x57, 0xAE, 0xCA, 0x35, 0x9C, 0x2E, 0x12, 0xFB, 0xE4, 0xBA, 0x5D, 0x20, 0xDC, 0x94, 0x57]),
 		rootSerial: 10003001
 )
@@ -228,23 +204,48 @@ let trustedSigner: SigningCertificate = SigningCertificate(
 
 
 
+```swift
+import HTTPSecurity
 
+let trustedSigners: [SigningCertificate] = [trustedSigner]
+let cmsValidator = CMSSignatureValidator(trustedSigners: trustedSigners)
 
+let payload = Data(base64Encoded:                  "WwogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMDYtMTdUMTA6MDA6MDAuMDAwKzAyMDAiLAogICJ1aXRzbGFnZGF0dW0iOiIyMDIwLTA2LTE3VDEwOjEwOjAwLjAwMCswMjAwIiwKICAicmVzdWx0YWF0IjoiTkVHQVRJRUYiLAogICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAiYWZzcHJhYWtJZCI6Mjc4NzE3Njh9LAogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMTEtMDhUMTA6MTU6MDAuMDAwKzAxMDAiLAogICAidWl0c2xhZ2RhdHVtIjoiMjAyMC0xMS0wOVQwNzo1MDozOS4wMDArMDEwMCIsCiAgICJyZXN1bHRhYXQiOiJQT1NJVElFRiIsCiAgICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAgImFmc3ByYWFrSWQiOjI1ODcxOTcyMTl9Cl0K"            
+/*
+ Base 64 encoding of 
+[
+ {"afnamedatum":"2020-06-17T10:00:00.000+0200",
+  "uitslagdatum":"2020-06-17T10:10:00.000+0200",
+  "resultaat":"NEGATIEF",
+  "afspraakStatus":"AFGEROND",
+  "afspraakId":27871768},
+ {"afnamedatum":"2020-11-08T10:15:00.000+0100",
+   "uitslagdatum":"2020-11-09T07:50:39.000+0100",
+   "resultaat":"POSITIEF",
+   "afspraakStatus":"AFGEROND",
+   "afspraakId":2587197219}
+]
+*/
+if cmsValidator.validate(signature: Data(), content: payload) {
+ // Fails. 
+}
 
+let signature = Data(base64Encoded: "MIIKcAYJKoZIh....D6I/n")!
+if cmsValidator.validate(signature: signature, content: payload) {
+ // True. 
+}
+```
+
+#### CMSCertificateHelper
+
+There are two helper methods to get the common name and the authority key identifier from a X509 certificate:
 
 ```swift
 import HTTPSecurity
 
-let trustedSigners: [SigningCertificate] = ...
-let cmsValidator = CMSSignatureValidator(trustedSigners: trustedSigners)
-
-let content = Data("This is awesome".utf8)
-let signature = Data()
-if cmsValidator.validate(signature: signature, content: content) {
- // Fails. 
-}
-
-
+let helper = CMSCertificateHelper()
+let commonName = helper.getCommonName(for: certificateData) // optional String
+let authorityKeyIdentifier = helper.getAuthorityKeyIdentifier(for: certificateData) // optional Data
 
 ```
 
