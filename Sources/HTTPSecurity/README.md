@@ -8,12 +8,12 @@ The chain of certificates (serverTrust) and the host can be found with
 
 ```swift
 guard challenge?.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-    let serverTrust = challenge?.protectionSpace.serverTrust, 
-    let host = challenge?.protectionSpace.host else {
-			
-			print("invalid authenticationMethod")
-			completionHandler(.performDefaultHandling, nil)
-			return
+	let serverTrust = challenge?.protectionSpace.serverTrust, 
+	let host = challenge?.protectionSpace.host else {
+	
+		print("invalid authenticationMethod")
+		completionHandler(.performDefaultHandling, nil)
+		return
 }
 		
 let policies = [SecPolicyCreateSSL(true, host as CFString)]
@@ -51,20 +51,21 @@ import HTTPSecurity
 import Security	
 
 func checkATS(
-		serverTrust: SecTrust,
-		policies: [SecPolicy],
-		trustedCertificates: [Data]) -> Bool {
-		
-    let appTransportSecurityChecker = AppTransportSecurityChecker()		
-  
-    // Prevent further checks if the AppTransportSecurity declined the certificate
-		guard appTransportSecurityChecker.check(
-			serverTrust: serverTrust,
-			policies: policies,
-			trustedCertificates: trustedCertificates) else {
-			print("Bail on ATS")
-			return false
-		}
+	serverTrust: SecTrust,
+	policies: [SecPolicy],
+	trustedCertificates: [Data]) -> Bool {
+	
+	let appTransportSecurityChecker = AppTransportSecurityChecker()	
+	
+	// Prevent further checks if the AppTransportSecurity declined the certificate
+	guard appTransportSecurityChecker.check(
+		serverTrust: serverTrust,
+		policies: policies,
+		trustedCertificates: trustedCertificates) else {
+		print("Bail on ATS")
+		return false
+	}
+}
 ```
 
 
@@ -77,7 +78,7 @@ The `TLSValidor` class has two helper methods to assist Transport Layer Security
 
 #### validateSubjectAlternativeDNSName
 
-We check if the [Subject Alertnative Name](https://en.wikipedia.org/wiki/Subject_Alternative_Name) of a certificate is the [fully qualified domain name](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) we expect it to be. 
+We check if the [Subject Alternative Name](https://en.wikipedia.org/wiki/Subject_Alternative_Name) of a certificate is the [fully qualified domain name](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) we expect it to be. 
 
 ```swift
 import HTTPSecurity
@@ -86,16 +87,16 @@ import Security
 func checkSubjectAlternativeName(
 	serverTrust: SecTrust,
 	fullyQualifiedDomainName: String) -> Bool {
-			
+	
 	var matchesFQDN = false
-  let tlsValidator = TLSValidator()
+	let tlsValidator = TLSValidator()
 	for index in 0 ..< SecTrustGetCertificateCount(serverTrust) {
 		if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
-      
-      // Convert SecCertificate to our Certificate struct
+		
+			// Convert SecCertificate to our Certificate struct
 			let serverCert = Certificate(certificate: serverCertificate)
-      
-      // Validate if the SAN matches the expected fqdn
+			
+			// Validate if the SAN matches the expected fqdn
 			if tlsValidator.validateSubjectAlternativeDNSName(fullyQualifiedDomainName, for: serverCert.data) {
 				matchesFQDN = true
 				print("Certificate matched SAN \(fullyQualifiedDomainName)")
@@ -117,17 +118,17 @@ import Security
 func compareCertificate(
 	serverTrust: SecTrust,
 	trustedCertificateData: Data) -> Bool {
-			
+	
 	var validCertificate = false
-  let tlsValidator = TLSValidator()
+	let tlsValidator = TLSValidator()
 	for index in 0 ..< SecTrustGetCertificateCount(serverTrust) {
 		if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
-      
-      // Convert SecCertificate to our Certificate struct
+		
+			// Convert SecCertificate to our Certificate struct
 			let serverCert = Certificate(certificate: serverCertificate)
  
-      // Check if the certificate matches the expected certificate
-      validCertificate = validCertificate || tlsValidator.compare(serverCert.data with: trustedCertificateData)
+			// Check if the certificate matches the expected certificate
+			validCertificate = validCertificate || tlsValidator.compare(serverCert.data with: trustedCertificateData)
 		}
 	}
 	return validCertificate
@@ -164,7 +165,7 @@ import HTTPSecurity
 let content = Data("This is awesome".utf8)
 let signature = Data()
 if AlwaysAllowSignatureValidator().validate(signature: signature, content: content) {
- // Always true 
+	// Always true 
 }
 ```
 
@@ -172,7 +173,7 @@ if AlwaysAllowSignatureValidator().validate(signature: signature, content: conte
 
 #### Cryptographic Message Syntax
 
-Another implementation of the SignatureValidation Protocol is the `CMSSignatureValidator`, based upon the [Cryptographic Message Syntax](https://en.wikipedia.org/wiki/Cryptographic_Message_Syntax). Just as with the TLS certificate, we are very carefull with which certificates we accept for signatures. 
+Another implementation of the SignatureValidation Protocol is the `CMSSignatureValidator`, based upon the [Cryptographic Message Syntax](https://en.wikipedia.org/wiki/Cryptographic_Message_Syntax). Just as with the TLS certificate, we are very careful with which certificates we accept for signatures. 
 
 You can tighten or relax the check with the optional commonName,  authority key identifier, the optional subject key identifier and the optional serial number of the x509 certificate. 
 
@@ -189,12 +190,12 @@ MIIFdDCCA1ygAwIBAgIEAJiiOTANBgkqhkiG9w0BAQsFADBaMQswCQYDVQQGEwJO
 -----END CERTIFICATE-----
 """
 let trustedSigner: SigningCertificate = SigningCertificate(
-    name: "Staat der Nederlanden Root CA - G3", 
-    certificate: sdNRootCAG3String, 
-    commonName: ".rdobeheer.nl", 
-    authorityKeyIdentifier: nil,
-		subjectKeyIdentifier: Data([0x04, 0x14, /* keyID starts here: */ 0x54, 0xAD, 0xFA, 0xC7, 0x92, 0x57, 0xAE, 0xCA, 0x35, 0x9C, 0x2E, 0x12, 0xFB, 0xE4, 0xBA, 0x5D, 0x20, 0xDC, 0x94, 0x57]),
-		rootSerial: 10003001
+	name: "Staat der Nederlanden Root CA - G3", 
+	certificate: sdNRootCAG3String, 
+	commonName: ".rdobeheer.nl", 
+	authorityKeyIdentifier: nil,
+	subjectKeyIdentifier: Data([0x04, 0x14, /* keyID starts here: */ 0x54, 0xAD, 0xFA, 0xC7, 0x92, 0x57, 0xAE, 0xCA, 0x35, 0x9C, 0x2E, 0x12, 0xFB, 0xE4, 0xBA, 0x5D, 0x20, 0xDC, 0x94, 0x57]),
+	rootSerial: 10003001
 )
 ```
 
@@ -206,29 +207,32 @@ import HTTPSecurity
 let trustedSigners: [SigningCertificate] = [trustedSigner]
 let cmsValidator = CMSSignatureValidator(trustedSigners: trustedSigners)
 
-let payload = Data(base64Encoded:                  "WwogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMDYtMTdUMTA6MDA6MDAuMDAwKzAyMDAiLAogICJ1aXRzbGFnZGF0dW0iOiIyMDIwLTA2LTE3VDEwOjEwOjAwLjAwMCswMjAwIiwKICAicmVzdWx0YWF0IjoiTkVHQVRJRUYiLAogICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAiYWZzcHJhYWtJZCI6Mjc4NzE3Njh9LAogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMTEtMDhUMTA6MTU6MDAuMDAwKzAxMDAiLAogICAidWl0c2xhZ2RhdHVtIjoiMjAyMC0xMS0wOVQwNzo1MDozOS4wMDArMDEwMCIsCiAgICJyZXN1bHRhYXQiOiJQT1NJVElFRiIsCiAgICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAgImFmc3ByYWFrSWQiOjI1ODcxOTcyMTl9Cl0K"            
+let payload = Data(base64Encoded: "WwogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMDYtMTdUMTA6MDA6MDAuMDAwKzAyMDAiLAogICJ1aXRzbGFnZGF0dW0iOiIyMDIwLTA2LTE3VDEwOjEwOjAwLjAwMCswMjAwIiwKICAicmVzdWx0YWF0IjoiTkVHQVRJRUYiLAogICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAiYWZzcHJhYWtJZCI6Mjc4NzE3Njh9LAogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMTEtMDhUMTA6MTU6MDAuMDAwKzAxMDAiLAogICAidWl0c2xhZ2RhdHVtIjoiMjAyMC0xMS0wOVQwNzo1MDozOS4wMDArMDEwMCIsCiAgICJyZXN1bHRhYXQiOiJQT1NJVElFRiIsCiAgICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAgImFmc3ByYWFrSWQiOjI1ODcxOTcyMTl9Cl0K"
 /*
  Base 64 encoding of 
 [
- {"afnamedatum":"2020-06-17T10:00:00.000+0200",
-  "uitslagdatum":"2020-06-17T10:10:00.000+0200",
-  "resultaat":"NEGATIEF",
-  "afspraakStatus":"AFGEROND",
-  "afspraakId":27871768},
- {"afnamedatum":"2020-11-08T10:15:00.000+0100",
-   "uitslagdatum":"2020-11-09T07:50:39.000+0100",
-   "resultaat":"POSITIEF",
-   "afspraakStatus":"AFGEROND",
-   "afspraakId":2587197219}
+	{
+		"afnamedatum":"2020-06-17T10:00:00.000+0200",
+		"uitslagdatum":"2020-06-17T10:10:00.000+0200",
+		"resultaat":"NEGATIEF",
+		"afspraakStatus":"AFGEROND",
+		"afspraakId":27871768
+	},{
+		"afnamedatum":"2020-11-08T10:15:00.000+0100",
+		"uitslagdatum":"2020-11-09T07:50:39.000+0100",
+		"resultaat":"POSITIEF",
+		"afspraakStatus":"AFGEROND",
+		"afspraakId":2587197219
+	}
 ]
 */
 if cmsValidator.validate(signature: Data(), content: payload) {
- // Fails. 
+	// Fails. 
 }
 
 let signature = Data(base64Encoded: "MIIKcAYJKoZIh....D6I/n")!
 if cmsValidator.validate(signature: signature, content: payload) {
- // True. 
+	// True. 
 }
 ```
 
