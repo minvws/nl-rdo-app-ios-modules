@@ -8,6 +8,51 @@
         "branch" : "feature/custom-url-support",
         "revision" : "46e9b6d35d365066b3d8b7cf86672fc68451a09b"
       }
+    },
+    {
+      "identity" : "cwlcatchexception",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattgallagher/CwlCatchException.git",
+      "state" : {
+        "revision" : "35f9e770f54ce62dd8526470f14c6e137cef3eea",
+        "version" : "2.1.1"
+      }
+    },
+    {
+      "identity" : "cwlpreconditiontesting",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattgallagher/CwlPreconditionTesting.git",
+      "state" : {
+        "revision" : "c21f7bab5ca8eee0a9998bbd17ca1d0eb45d4688",
+        "version" : "2.1.0"
+      }
+    },
+    {
+      "identity" : "nimble",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Quick/Nimble.git",
+      "state" : {
+        "revision" : "1f3bde57bde12f5e7b07909848c071e9b73d6edc",
+        "version" : "10.0.0"
+      }
+    },
+    {
+      "identity" : "ohhttpstubs",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AliSoftware/OHHTTPStubs.git",
+      "state" : {
+        "revision" : "12f19662426d0434d6c330c6974d53e2eb10ecd9",
+        "version" : "9.1.0"
+      }
+    },
+    {
+      "identity" : "openssl",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzyzanowskim/OpenSSL.git",
+      "state" : {
+        "revision" : "52db2ab9de7f78d1dea0d728fddd47fb133e25b7",
+        "version" : "1.1.1900"
+      }
     }
   ],
   "version" : 2
