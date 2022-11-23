@@ -45,12 +45,10 @@ class TLSValidatorTests: XCTestCase {
 		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
-		let sans = sut.getSubjectAlternativeDNSNames(for: certificateData)
+		let result = sut.validateSubjectAlternativeDNSName("api-ct.bananenhalen.nl", for: certificateData)
 
 		// Then
-		expect(sans).to(haveCount(1))
-		expect(sans?.first) == "api-ct.bananenhalen.nl"
-		expect(self.sut.validateSubjectAlternativeDNSName("api-ct.bananenhalen.nl", for: certificateData)) == true
+		expect(result) == true
 	}
 
 	func test_subjectAlternativeNames_fakeLeaf() throws {
@@ -67,19 +65,8 @@ class TLSValidatorTests: XCTestCase {
 		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
-		let sans = sut.getSubjectAlternativeDNSNames(for: certificateData)
 
 		// Then
-		expect(sans).to(haveCount(2))
-		// check that we skip the IP, otherName and email entry.
-		expect(sans).to(contain("test1"))
-		expect(sans).to(contain("test2"))
-		expect(sans).toNot(contain("1.2.3.4"))
-
-		// OpenSSL seems to keep the order the same.
-		expect(sans?.first) == "test1"
-		expect(sans?.last) == "test2"
-
 		expect(self.sut.validateSubjectAlternativeDNSName("test1", for: certificateData)) == true
 		expect(self.sut.validateSubjectAlternativeDNSName("test2", for: certificateData)) == true
 		// check that we do not see the non DNS entries. IP address is a bit of an edge case. Perhaps

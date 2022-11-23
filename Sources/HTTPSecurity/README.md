@@ -95,10 +95,6 @@ func checkSubjectAlternativeName(
       // Convert SecCertificate to our Certificate struct
 			let serverCert = Certificate(certificate: serverCertificate)
       
-      // Display the SAN
-      let san = tlsValidator.getSubjectAlternativeDNSNames(for: serverCert.data)
-      print("The Subject Alternative Name is \(san)")
-      
       // Validate if the SAN matches the expected fqdn
 			if tlsValidator.validateSubjectAlternativeDNSName(fullyQualifiedDomainName, for: serverCert.data) {
 				matchesFQDN = true
@@ -236,18 +232,23 @@ if cmsValidator.validate(signature: signature, content: payload) {
 }
 ```
 
-#### CMSCertificateHelper
 
-There are two helper methods to get the common name and the authority key identifier from a X509 certificate:
+
+## Certificate Parser
+
+There are three helper methods to get the [authority key identifier](https://ldapwiki.com/wiki/AuthorityKeyIdentifier), the common name or the [subject alternative names](https://en.wikipedia.org/wiki/Subject_Alternative_Name) from a [X509](https://en.wikipedia.org/wiki/X.509) certificate:
 
 ```swift
 import HTTPSecurity
 
-let helper = CMSCertificateHelper()
-let commonName = helper.getCommonName(for: certificateData) // optional String
-let authorityKeyIdentifier = helper.getAuthorityKeyIdentifier(for: certificateData) // optional Data
+let parser = CertificateParser()
 
+let authorityKeyIdentifier = parser.getAuthorityKeyIdentifier(for: certificateData) // optional Data
+let commonName = parser.getCommonName(for: certificateData) // optional String
+let subjectAlternativeNames = parser.getSubjectAlternativeDNSNames(for: certificateData) // optional [String]
 ```
+
+All three methods are used in the TLS and CMS Validators, but can be used separately. 
 
 
 

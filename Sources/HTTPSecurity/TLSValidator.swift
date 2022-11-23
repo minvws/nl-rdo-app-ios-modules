@@ -14,11 +14,6 @@ public class TLSValidator {
 	
 	public init() {}
 	
-	public func getSubjectAlternativeDNSNames(for certificateData: Data) -> [String]? {
-		
-		return x509Validator.getSubjectAlternativeDNSNames(certificateData) as? [String]
-	}
-
 	public func validateSubjectAlternativeDNSName(_ hostname: String, for certificateData: Data) -> Bool {
 		
 		return x509Validator.validateSubjectAlternativeDNSName(hostname, forCertificateData: certificateData)
