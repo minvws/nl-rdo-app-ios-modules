@@ -66,9 +66,9 @@ final class OpenIDConnectTests: XCTestCase {
 		stub(condition: isPath("/.well-known/openid-configuration")) { _ in
 			
 			return HTTPStubsResponse(
-				jsonObject: self.valid_openid_configuration,
+				jsonObject: self.validOpenidConfiguration,
 				statusCode: 200,
-				headers: ["Content-Type":"application/json"]
+				headers: ["Content-Type": "application/json"]
 			)
 		}
 		let exp = expectation(description: "test_requestAccessToken_cantOpenSafari")
@@ -98,7 +98,7 @@ final class OpenIDConnectTests: XCTestCase {
 	
 	// MARK: - Helpers
 	
-	let valid_openid_configuration: [String : Any] = [
+	let validOpenidConfiguration: [String: Any] = [
 		"version": "3.0",
 		"token_endpoint_auth_methods_supported": [
 			"none"

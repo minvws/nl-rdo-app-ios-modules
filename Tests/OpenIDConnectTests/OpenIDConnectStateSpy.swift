@@ -7,7 +7,7 @@
 
 import XCTest
 import AppAuth
-import OpenIDConnect   
+import OpenIDConnect
 
 class OpenIDConnectStateSpy: OpenIDConnectState {
 
@@ -33,5 +33,3 @@ class OpenIDConnectStateSpy: OpenIDConnectState {
 		}
 	}
 }
-
-
