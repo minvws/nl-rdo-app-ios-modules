@@ -2,10 +2,11 @@
 
 This package contains:
 
+- [Logging](/Sources/Logging/Logging.md) a simple logging tool
 - [Luhn Check](/Sources/LuhnCheck/LuhnCheck.md) for validating tokens
-- [QRGenerator](/Sources/QRGenerator/QRGenerator.md) to assist creating a QR-code
 - [OpenIDConnect](/Sources/OpenIDConnect/OpenIDConnect.md) to assist connecting to OpenID
-- HTTP Security (todo)
+- [QRGenerator](/Sources/QRGenerator/QRGenerator.md) to assist creating a QR-code
+- [HTTP Security](/Sources/HTTPSecurity/README.md) some tools to assist with Signature and TLS validation
 
 ## Installation
 
