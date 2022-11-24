@@ -74,7 +74,7 @@ func checkATS(
 
 ### Usage
 
-The `TLSValidor` class has two helper methods to assist Transport Layer Security validation. We can [compare the subject alternative name](validateSubjectAlternativeDNSName) with the expected hostname, and we can [compare the certificate with a trusted certificate](compare)
+The `TLSValidor` class has two helper methods to assist Transport Layer Security validation. We can [compare the subject alternative name](#validateSubjectAlternativeDNSName) with the expected hostname, and we can [compare the certificate with a trusted certificate](#compare)
 
 #### validateSubjectAlternativeDNSName
 
