@@ -13,6 +13,16 @@ set -e
 OPENSSL=${OPENSSL:-/opt/homebrew/Cellar/openssl\@1.1/1.1.1s/bin/openssl}
 JSON=${1:-../payload.json}
 
+if $OPENSSL version | grep -q LibreSSL; then
+	echo Sorry - OpenSSL is needed.
+	exit 1
+fi
+
+if ! $OPENSSL version | grep -q 1\.; then
+	echo Sorry - OpenSSL 1.0 or higher is needed.
+	exit 1
+fi
+
 S=0
 $OPENSSL req -x509 -days 365 -new \
 	-out 0.pem -keyout 0.key -nodes \

@@ -20,182 +20,181 @@ class X509ValidatorTests: XCTestCase {
 		sut = X509Validator()
 	}
 	
-//	func test_validateCMSSignature_padding_pkcs_validPayload() throws {
-//
-//		// Given
-//		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-//		let certificateData = try Data(contentsOf: certificateUrl)
-//
-//		// When
-//		let validation = sut.validateCMSSignature(
-//			ValidationData.signaturePKCS,
-//			contentData: ValidationData.payload,
-//			certificateData: certificateData,
-//			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
-//			requiredCommonNameContent: ".coronatester.nl"
-//		)
-//
-//		// Then
-//		expect(validation) == true
-//	}
-//
-//	func test_validateCMSSignature__padding_pkcs_wrongPayload() throws {
-//
-//		// Given
-//		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-//		let certificateData = try Data(contentsOf: certificateUrl)
-//
-//		// When
-//		let validation = sut.validateCMSSignature(
-//			ValidationData.signaturePKCS,
-//			contentData: ValidationData.wrongPayload,
-//			certificateData: certificateData,
-//			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
-//			requiredCommonNameContent: ".coronatester.nl"
-//		)
-//
-//		// Then
-//		expect(validation) == false
-//	}
-//
-//	func test_validateCMSSignature__padding_pss_validPayload() throws {
-//
-//		// Given
-//		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-//		let certificateData = try Data(contentsOf: certificateUrl)
-//
-//		// When
-//		let validation = sut.validateCMSSignature(
-//			ValidationData.signaturePSS,
-//			contentData: ValidationData.payload,
-//			certificateData: certificateData,
-//			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
-//			requiredCommonNameContent: ".coronatester.nl"
-//		)
-//
-//		// Then
-//		expect(validation) == true
-//	}
-//
-//	func test_validateCMSSignature__padding_pss_wrongPayload() throws {
-//
-//		// Given
-//		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-//		let certificateData = try Data(contentsOf: certificateUrl)
-//
-//		// When
-//		let validation = sut.validateCMSSignature(
-//			ValidationData.wrongPayload,
-//			contentData: ValidationData.payload,
-//			certificateData: certificateData,
-//			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
-//			requiredCommonNameContent: ".coronatester.nl"
-//		)
-//
-//		// Then
-//		expect(validation) == false
-//	}
-//
-//	func test_validateCMSSignature__test_pinning_wrongCommonName() throws {
-//
-//		// Given
-//		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-//		let certificateData = try Data(contentsOf: certificateUrl)
-//
-//		// When
-//		let validation = sut.validateCMSSignature(
-//			ValidationData.signaturePKCS,
-//			contentData: ValidationData.payload,
-//			certificateData: certificateData,
-//			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
-//			requiredCommonNameContent: ".coronacheck.nl"
-//		)
-//
-//		// Then
-//		expect(validation) == false
-//	}
-//
-//	func test_validateCMSSignature__test_pinning_commonNameAsPartOfDomain() throws {
-//
-//		// Given
-//		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-//		let certificateData = try Data(contentsOf: certificateUrl)
-//
-//		// When
-//		let validation = sut.validateCMSSignature(
-//			ValidationData.signaturePKCS,
-//			contentData: ValidationData.payload,
-//			certificateData: certificateData,
-//			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
-//			requiredCommonNameContent: ".coronatester.nl.xx.nl"
-//		)
-//
-//		// Then
-//		expect(validation) == false
-//	}
-//
-//	func test_validateCMSSignature__test_pinning_emptyCommonName() throws {
-//
-//		// Given
-//		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-//		let certificateData = try Data(contentsOf: certificateUrl)
-//
-//		// When
-//		let validation = sut.validateCMSSignature(
-//			ValidationData.signaturePKCS,
-//			contentData: ValidationData.payload,
-//			certificateData: certificateData,
-//			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
-//			requiredCommonNameContent: ""
-//		)
-//
-//		// Then
-//		expect(validation) == true
-//	}
-//
-//	func test_validateCMSSignature__test_pinning_emptyAuthorityKeyIdentifier() throws {
-//
-//		// Given
-//		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-//		let certificateData = try Data(contentsOf: certificateUrl)
-//
-//		// When
-//		let validation = sut.validateCMSSignature(
-//			ValidationData.signaturePKCS,
-//			contentData: ValidationData.payload,
-//			certificateData: certificateData,
-//			authorityKeyIdentifier: nil,
-//			requiredCommonNameContent: "coronatester.nl"
-//		)
-//
-//		// Then
-//		expect(validation) == true
-//	}
-//
-//	func test_validateCMSSignature__test_pinning_emptyAuthorityKeyIdentifier_emptyCommonName() throws {
-//
-//		// Given
-//		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-//		let certificateData = try Data(contentsOf: certificateUrl)
-//
-//		// When
-//		let validation = sut.validateCMSSignature(
-//			ValidationData.signaturePKCS,
-//			contentData: ValidationData.payload,
-//			certificateData: certificateData,
-//			authorityKeyIdentifier: nil,
-//			requiredCommonNameContent: ""
-//		)
-//
-//		// Then
-//		expect(validation) == true
-//	}
-//
+	func test_validateCMSSignature_padding_pkcs_validPayload() throws {
+
+		// Given
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the signature
+
+		// When
+		let validation = sut.validateCMSSignature(
+			try getbase64EncodedData("pkcs1Signature"),
+			contentData: try getbase64EncodedData("pkcs1Payload"),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
+			requiredCommonNameContent: ".rdobeheer.nl"
+		)
+
+		// Then
+		expect(validation) == true
+	}
+
+	func test_validateCMSSignature_padding_pkcs_wrongPayload() throws {
+
+		// Given
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the signature
+
+		// When
+		let validation = sut.validateCMSSignature(
+			try getbase64EncodedData("pkcs1Signature"),
+			contentData: try getbase64EncodedData("pkcs1Payload") + Data("Wrong".utf8),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
+			requiredCommonNameContent: ".rdobeheer.nl"
+		)
+
+		// Then
+		expect(validation) == false
+	}
+
+	func test_validateCMSSignature_padding_pss_validPayload() throws {
+
+		// Given
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh_pss.sh to generate the signature
+
+		// When
+		let validation = sut.validateCMSSignature(
+			try getbase64EncodedData("pssSignature"),
+			contentData: try getbase64EncodedData("pssPayload"),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
+			requiredCommonNameContent: ".rdobeheer.nl"
+		)
+
+		// Then
+		expect(validation) == true
+	}
+
+	func test_validateCMSSignature_padding_pss_wrongPayload() throws {
+
+		// Given
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh_pss.sh to generate the signature
+
+		// When
+		let validation = sut.validateCMSSignature(
+			try getbase64EncodedData("pssSignature"),
+			contentData: try getbase64EncodedData("pssPayload") + Data("Wrong".utf8),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
+			requiredCommonNameContent: ".rdobeheer.nl"
+		)
+
+		// Then
+		expect(validation) == false
+	}
+
+	func test_validateCMSSignature_test_pinning_wrongCommonName() throws {
+
+		// Given
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the signature
+
+		// When
+		let validation = sut.validateCMSSignature(
+			try getbase64EncodedData("pkcs1Signature"),
+			contentData: try getbase64EncodedData("pkcs1Payload"),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
+			requiredCommonNameContent: ".coronacheck.nl"
+		)
+
+		// Then
+		expect(validation) == false
+	}
+
+	func test_validateCMSSignature_test_pinning_commonNameAsPartOfDomain() throws {
+
+		// Given
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the signature
+
+		// When
+		let validation = sut.validateCMSSignature(
+			try getbase64EncodedData("pkcs1Signature"),
+			contentData: try getbase64EncodedData("pkcs1Payload"),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
+			requiredCommonNameContent: ".rdobeheer.nl.malicioushacker.nl"
+		)
+
+		// Then
+		expect(validation) == false
+	}
+
+	func test_validateCMSSignature_test_pinning_emptyCommonName() throws {
+
+		// Given
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the signature
+
+		// When
+		let validation = sut.validateCMSSignature(
+			try getbase64EncodedData("pkcs1Signature"),
+			contentData: try getbase64EncodedData("pkcs1Payload"),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
+			requiredCommonNameContent: ""
+		)
+
+		// Then
+		expect(validation) == true
+	}
+
+	func test_validateCMSSignature_test_pinning_emptyAuthorityKeyIdentifier() throws {
+
+		// Given
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the signature
+
+		// When
+		let validation = sut.validateCMSSignature(
+			try getbase64EncodedData("pkcs1Signature"),
+			contentData: try getbase64EncodedData("pkcs1Payload"),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: nil,
+			requiredCommonNameContent: ".rdobeheer.nl"
+		)
+
+		// Then
+		expect(validation) == true
+	}
+
+	func test_validateCMSSignature_test_pinning_emptyAuthorityKeyIdentifier_emptyCommonName() throws {
+
+		// Given
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the signature
+
+		// When
+		let validation = sut.validateCMSSignature(
+			try getbase64EncodedData("pkcs1Signature"),
+			contentData: try getbase64EncodedData("pkcs1Payload"),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: nil,
+			requiredCommonNameContent: ""
+		)
+
+		// Then
+		expect(validation) == true
+	}
+
 	func test_validateCMSSignature_verydeep() throws {
 		
-		// Use deep-chain.sh to generate this certificate
-		
 		// Given
+		// Use deep-chain.sh to generate this certificate
 		
 		// When
 		let validation = sut.validateCMSSignature(
@@ -212,9 +211,8 @@ class X509ValidatorTests: XCTestCase {
 	
 	func test_validateCMSSignature_verydeep_invalidAuthorityKeyIdentifier() throws {
 		
-		// Use deep-chain.sh to generate this certificate
-		
 		// Given
+		// Use deep-chain.sh to generate this certificate
 		
 		// When
 		let validation = sut.validateCMSSignature(
