@@ -3,7 +3,7 @@
 # Used to generate a certificate with partial mismatch between SAN and CN
 #
 # Outputs:
-# - emailAndIPCert.pem, the certificate with a email and IP as SAN
+# - emailAndIPCert.pem, the certificate with a partial mismatch between SAN and CN
 
 TMPDIR=${TMPDIR:-/tmp}
 set -e
