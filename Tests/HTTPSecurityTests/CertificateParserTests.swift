@@ -25,11 +25,10 @@ class CertificateParserTests: XCTestCase {
 	func test_getAuthorityKeyIdentifier_privateRoot_shouldBeNil() throws {
 
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "Staat der Nederlanden Private Root CA - G1", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use Staat der Nederlanden Private Root CA - G1 certificate
 
 		// When
-		let key = sut.getAuthorityKeyIdentifier(for: certificateData)
+		let key = sut.getAuthorityKeyIdentifier(for: try getCertificateData("Staat der Nederlanden Private Root CA - G1"))
 
 		// Then
 		expect(key) == nil
@@ -47,19 +46,17 @@ class CertificateParserTests: XCTestCase {
 		expect(key) == nil
 	}
 	
-	func test_getAuthorityKeyIdentifier_certRealLeaf_shouldMatch() throws {
+	func test_getAuthorityKeyIdentifier_fakePKIOverheidCert_shouldNotBeNil() throws {
 		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certRealLeaf", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
-		
-		let expectedAuthorityKeyIdentifier = Data([0x04, 0x14, /* keyID starts here: */ 0x14, 0x2e, 0xb3, 0x17, 0xb7, 0x58, 0x56, 0xcb, 0xae, 0x50, 0x09, 0x40, 0xe6, 0x1f, 0xaf, 0x9d, 0x8b, 0x14, 0xc2, 0xc6])
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
-		let key = sut.getAuthorityKeyIdentifier(for: certificateData)
+		let key = sut.getAuthorityKeyIdentifier(for: try getCertificateData("fakePKIOverheidCert"))
 		
 		// Then
-		expect(key) == expectedAuthorityKeyIdentifier
+		expect(key) != nil
 	}
 	
 	// MARK: - Common Name
@@ -79,11 +76,10 @@ class CertificateParserTests: XCTestCase {
 	func test_getCommonName_noCommonName() throws {
 		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certWithoutCN", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use noCommonName.sh to generate this certificate
 		
 		// When
-		let name = sut.getCommonName(for: certificateData)
+		let name = sut.getCommonName(for: try getCertificateData("noCommonNameCert"))
 		
 		// Then
 		expect(name) == nil
@@ -92,11 +88,10 @@ class CertificateParserTests: XCTestCase {
 	func test_getCommonName_PrivateRootCA_G1() throws {
 		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "Staat der Nederlanden Private Root CA - G1", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use Staat der Nederlanden Private Root CA - G1 certificate
 		
 		// When
-		let name = sut.getCommonName(for: certificateData)
+		let name = sut.getCommonName(for: try getCertificateData("Staat der Nederlanden Private Root CA - G1"))
 
 		// Then
 		expect(name) == "Staat der Nederlanden Private Root CA - G1"
@@ -105,76 +100,38 @@ class CertificateParserTests: XCTestCase {
 	func test_getCommonName_RootCA_G3() throws {
 		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "Staat der Nederlanden Root CA - G3", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use Staat der Nederlanden Root CA - G3 certificate
 		
 		// When
-		let name = sut.getCommonName(for: certificateData)
+		let name = sut.getCommonName(for: try getCertificateData("Staat der Nederlanden Root CA - G3"))
 		
 		// Then
 		expect(name) == "Staat der Nederlanden Root CA - G3"
 	}
-	
-	func test_getCommonName_EVRootCA() throws {
-		
-		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "Staat der Nederlanden EV Root CA", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
-		
-		// When
-		let name = sut.getCommonName(for: certificateData)
-		
-		// Then
-		expect(name) == "Staat der Nederlanden EV Root CA"
-	}
-	
+
 	// MARK: - Subject Alternative Name
 
-	func test_subjectAlternativeNames_realLeaf() throws {
-
-		// Chain that is identical in subjectKeyIdentifier, issuerIdentifier, etc
-		// to a real one - but fake from the root down.
-		//
-		// See the Scripts directory:
-		//  gen_fake_bananen.sh         - takes real chain and makes a fake one from it.
-		//  gen_fake_cms_signed_json.sh - uses that to sign a bit of json.
-		//  gen_code.pl                 - generates below hardcoded data.
-		//
-		// For the scripts that have generated below.
-		//
-		// File:       : 1002.real
-		// SHA256 (DER): 19:C4:79:A1:D9:E9:BD:B3:D7:38:E8:41:45:70:16:FB:D8:15:C0:6B:71:96:12:F7:00:9A:1A:C7:E1:9B:F3:53
-		// Subject     : CN = api-ct.bananenhalen.nl
-		// Issuer      : C = US, O = Let's Encrypt, CN = R3
-		//
+	func test_subjectAlternativeNames_realCertificate() throws {
 
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certRealLeaf", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// getting the chain certificates:
+		// openssl s_client -showcerts -servername holder-api.coronacheck.nl -connect holder-api.coronacheck.nl:443
 
 		// When
-		let sans = sut.getSubjectAlternativeDNSNames(for: certificateData)
+		let sans = sut.getSubjectAlternativeDNSNames(for: try getCertificateData("holder-api.coronacheck.nl"))
 
 		// Then
 		expect(sans).to(haveCount(1))
-		expect(sans?.first) == "api-ct.bananenhalen.nl"
+		expect(sans?.first) == "holder-api.coronacheck.nl"
 	}
 
 	func test_subjectAlternativeNames_fakeLeaf() throws {
 
-		// Bizarre cert with odd extensions.
-		// Regenerate with openssl req -new -x509 -subj /CN=foo/ \
-		//      -addext "subjectAltName=otherName:foodofoo, otherName:1.2.3.4;UTF8,DNS:test1,DNS:test2,email:fo@bar,IP:1.2.3.4"  \
-		//      -nodes -keyout /dev/null |\
-		//            openssl x509 | pbcopy
-		//
-
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certWithEmailAndIP", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use emailAndIP.sh to generate this certificate
 
 		// When
-		let sans = sut.getSubjectAlternativeDNSNames(for: certificateData)
+		let sans = sut.getSubjectAlternativeDNSNames(for: try getCertificateData("emailAndIPCert"))
 
 		// Then
 		expect(sans).to(haveCount(2))
@@ -182,6 +139,7 @@ class CertificateParserTests: XCTestCase {
 		expect(sans).to(contain("test1"))
 		expect(sans).to(contain("test2"))
 		expect(sans).toNot(contain("1.2.3.4"))
+		expect(sans).toNot(contain("fo@bar"))
 
 		// OpenSSL seems to keep the order the same.
 		expect(sans?.first) == "test1"
