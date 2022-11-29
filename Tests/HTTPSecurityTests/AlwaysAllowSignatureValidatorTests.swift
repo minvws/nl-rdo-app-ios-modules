@@ -46,11 +46,4 @@ class AlwaysAllowSignatureValidatorTests: XCTestCase {
 		// Then
 		expect(result) == true
 	}
-	
 }
-/*
- 
- try ,
- contentData: ,
- certificateData: try getCertificateData("fakePKIOverheidCert"),
- */
