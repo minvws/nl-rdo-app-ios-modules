@@ -237,7 +237,7 @@ class X509ValidatorTests: XCTestCase {
 			try getbase64EncodedData("deepSignature"),
 			contentData: try getbase64EncodedData("deepPayload"),
 			certificateData: try getCertificateData("deepChainCert"),
-			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
 			requiredCommonNameContent: "leaf"
 		)
 		
