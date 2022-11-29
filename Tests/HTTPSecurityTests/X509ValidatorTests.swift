@@ -24,7 +24,9 @@ class X509ValidatorTests: XCTestCase {
 
 		// Given
 		// Use fakeStaatDerNederlanden.sh to generate this certificate
-		// Use sigh.sh to generate the signature
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
@@ -43,7 +45,9 @@ class X509ValidatorTests: XCTestCase {
 
 		// Given
 		// Use fakeStaatDerNederlanden.sh to generate this certificate
-		// Use sigh.sh to generate the signature
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
@@ -62,7 +66,9 @@ class X509ValidatorTests: XCTestCase {
 
 		// Given
 		// Use fakeStaatDerNederlanden.sh to generate this certificate
-		// Use sigh_pss.sh to generate the signature
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
@@ -81,7 +87,9 @@ class X509ValidatorTests: XCTestCase {
 
 		// Given
 		// Use fakeStaatDerNederlanden.sh to generate this certificate
-		// Use sigh_pss.sh to generate the signature
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
@@ -100,7 +108,9 @@ class X509ValidatorTests: XCTestCase {
 
 		// Given
 		// Use fakeStaatDerNederlanden.sh to generate this certificate
-		// Use sigh.sh to generate the signature
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
@@ -119,7 +129,9 @@ class X509ValidatorTests: XCTestCase {
 
 		// Given
 		// Use fakeStaatDerNederlanden.sh to generate this certificate
-		// Use sigh.sh to generate the signature
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
@@ -138,7 +150,9 @@ class X509ValidatorTests: XCTestCase {
 
 		// Given
 		// Use fakeStaatDerNederlanden.sh to generate this certificate
-		// Use sigh.sh to generate the signature
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
@@ -157,7 +171,9 @@ class X509ValidatorTests: XCTestCase {
 
 		// Given
 		// Use fakeStaatDerNederlanden.sh to generate this certificate
-		// Use sigh.sh to generate the signature
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
@@ -176,7 +192,9 @@ class X509ValidatorTests: XCTestCase {
 
 		// Given
 		// Use fakeStaatDerNederlanden.sh to generate this certificate
-		// Use sigh.sh to generate the signature
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
@@ -194,7 +212,7 @@ class X509ValidatorTests: XCTestCase {
 	func test_validateCMSSignature_verydeep() throws {
 		
 		// Given
-		// Use deep-chain.sh to generate this certificate
+		// Use deepChain.sh to generate this certificate
 		
 		// When
 		let validation = sut.validateCMSSignature(
@@ -212,7 +230,7 @@ class X509ValidatorTests: XCTestCase {
 	func test_validateCMSSignature_verydeep_invalidAuthorityKeyIdentifier() throws {
 		
 		// Given
-		// Use deep-chain.sh to generate this certificate
+		// Use deepChain.sh to generate this certificate
 		
 		// When
 		let validation = sut.validateCMSSignature(
@@ -226,27 +244,42 @@ class X509ValidatorTests: XCTestCase {
 		// Then
 		expect(validation) == false
 	}
-//
-//	func test_validateCMSSignature_noCommonName() throws {
-//
-//		// Use long-chain.sh to generate this certificate
-//
-//		// Given
-//		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certWithoutCN", withExtension: ".pem"))
-//		let certificateData = try Data(contentsOf: certificateUrl)
-//
-//		// When
-//		let validation = sut.validateCMSSignature(
-//			ValidationData.signatureNoCommonName,
-//			contentData: ValidationData.payload,
-//			certificateData: certificateData,
-//			authorityKeyIdentifier: ValidationData.noCommonNameAuthorityKeyIdentifier,
-//			requiredCommonNameContent: ".coronatester..nl"
-//		)
-//
-//		// Then
-//		expect(validation) == false
-//	}
+
+	func test_validateCMSSignature_noCommonName() throws {
+
+		// Given
+		// Use noCommonName.sh to generate this certificate
+
+		// When
+		let validation = sut.validateCMSSignature(
+			try getbase64EncodedData("noCommonNameSignature"),
+			contentData: try getbase64EncodedData("noCommonNamePayload"),
+			certificateData: try getCertificateData("noCommonNameCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("noCommonNameAuthorityKeyIdentifier"),
+			requiredCommonNameContent: ".rdobeheer.nl"
+		)
+
+		// Then
+		expect(validation) == false
+	}
+	
+	func test_validateCMSSignature_noCommonName_noRequiredName() throws {
+
+		// Given
+		// Use noCommonName.sh to generate this certificate
+
+		// When
+		let validation = sut.validateCMSSignature(
+			try getbase64EncodedData("noCommonNameSignature"),
+			contentData: try getbase64EncodedData("noCommonNamePayload"),
+			certificateData: try getCertificateData("noCommonNameCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("noCommonNameAuthorityKeyIdentifier"),
+			requiredCommonNameContent: ""
+		)
+
+		// Then
+		expect(validation) == true
+	}
 }
 
 func getCertificateData(_ fileName: String, extention: String = ".pem") throws -> Data {
