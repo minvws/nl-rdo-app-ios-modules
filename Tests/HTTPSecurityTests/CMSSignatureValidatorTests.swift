@@ -1,9 +1,9 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import XCTest
 import Nimble
@@ -18,13 +18,19 @@ class CMSignatureValidatorTests: XCTestCase {
 		super.setUp()
 	}
 	
-	func test_validSignature_noTrustedSigners() {
+	func test_validSignature_noTrustedSigners() throws {
 		
 		// Given
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use cleanup.sh to remove the unneeded files
 		sut = CMSSignatureValidator()
 		
 		// When
-		let result = sut.validate(signature: ValidationData.signaturePKCS, content: ValidationData.payload)
+		let result = sut.validate(
+			signature: try getbase64EncodedData("pkcs1Signature"),
+			content: try getbase64EncodedData("pkcs1Payload")
+		)
 		
 		// Then
 		expect(result) == false
@@ -33,13 +39,20 @@ class CMSignatureValidatorTests: XCTestCase {
 	func test_validSignature_validSigner() throws {
 		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-		let certificateString = try String(contentsOf: certificateUrl)
-		let signingCertificate = SigningCertificate(name: "certFakePKIOverheid", certificate: certificateString)
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use cleanup.sh to remove the unneeded files
+		let signingCertificate = SigningCertificate(
+			name: "certFakePKIOverheid",
+			certificate: try getCertificateString("fakePKIOverheidCert")
+		)
 		sut = CMSSignatureValidator(trustedSigners: [signingCertificate])
 		
 		// When
-		let result = sut.validate(signature: ValidationData.signaturePKCS, content: ValidationData.payload)
+		let result = sut.validate(
+			signature: try getbase64EncodedData("pkcs1Signature"),
+			content: try getbase64EncodedData("pkcs1Payload")
+		)
 		
 		// Then
 		expect(result) == true
@@ -48,13 +61,20 @@ class CMSignatureValidatorTests: XCTestCase {
 	func test_invalidSignature_validSigner() throws {
 		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-		let certificateString = try String(contentsOf: certificateUrl)
-		let signingCertificate = SigningCertificate(name: "certFakePKIOverheid", certificate: certificateString)
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use cleanup.sh to remove the unneeded files
+		let signingCertificate = SigningCertificate(
+			name: "certFakePKIOverheid",
+			certificate: try getCertificateString("fakePKIOverheidCert")
+		)
 		sut = CMSSignatureValidator(trustedSigners: [signingCertificate])
 		
 		// When
-		let result = sut.validate(signature: ValidationData.signaturePKCS, content: ValidationData.wrongPayload)
+		let result = sut.validate(
+			signature: try getbase64EncodedData("pkcs1Signature"),
+			content: try getbase64EncodedData("pkcs1Payload") + Data("Wrong".utf8)
+		)
 		
 		// Then
 		expect(result) == false
@@ -63,13 +83,20 @@ class CMSignatureValidatorTests: XCTestCase {
 	func test_validSignature_invalidSigner() throws {
 		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "Staat der Nederlanden Private Root CA - G1", withExtension: ".pem"))
-		let certificateString = try String(contentsOf: certificateUrl)
-		let signingCertificate = SigningCertificate(name: "Staat der Nederlanden Private Root CA - G1", certificate: certificateString)
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use cleanup.sh to remove the unneeded files
+		let signingCertificate = SigningCertificate(
+			name: "certFakePKIOverheid",
+			certificate: try getCertificateString("Staat der Nederlanden Private Root CA - G1")
+		)
 		sut = CMSSignatureValidator(trustedSigners: [signingCertificate])
 		
 		// When
-		let result = sut.validate(signature: ValidationData.signaturePKCS, content: ValidationData.payload)
+		let result = sut.validate(
+			signature: try getbase64EncodedData("pkcs1Signature"),
+			content: try getbase64EncodedData("pkcs1Payload") + Data("Wrong".utf8)
+		)
 		
 		// Then
 		expect(result) == false
@@ -78,13 +105,21 @@ class CMSignatureValidatorTests: XCTestCase {
 	func test_validSignature_validSigner_wrongSubjectKey() throws {
 		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-		let certificateString = try String(contentsOf: certificateUrl)
-		let signingCertificate = SigningCertificate(name: "certFakePKIOverheid", certificate: certificateString, subjectKeyIdentifier: ValidationData.authorityKeyIdentifier)
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use cleanup.sh to remove the unneeded files
+		let signingCertificate = SigningCertificate(
+			name: "certFakePKIOverheid",
+			certificate: try getCertificateString("fakePKIOverheidCert"),
+			subjectKeyIdentifier: Data("Wrong".utf8)
+		)
 		sut = CMSSignatureValidator(trustedSigners: [signingCertificate])
 		
 		// When
-		let result = sut.validate(signature: ValidationData.signaturePKCS, content: ValidationData.payload)
+		let result = sut.validate(
+			signature: try getbase64EncodedData("pkcs1Signature"),
+			content: try getbase64EncodedData("pkcs1Payload") + Data("Wrong".utf8)
+		)
 		
 		// Then
 		expect(result) == false
@@ -93,13 +128,21 @@ class CMSignatureValidatorTests: XCTestCase {
 	func test_validSignature_validSigner_wrongSerial() throws {
 		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-		let certificateString = try String(contentsOf: certificateUrl)
-		let signingCertificate = SigningCertificate(name: "certFakePKIOverheid", certificate: certificateString, rootSerial: 10000013)
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use cleanup.sh to remove the unneeded files
+		let signingCertificate = SigningCertificate(
+			name: "certFakePKIOverheid",
+			certificate: try getCertificateString("fakePKIOverheidCert"),
+			rootSerial: 10000013
+		)
 		sut = CMSSignatureValidator(trustedSigners: [signingCertificate])
 		
 		// When
-		let result = sut.validate(signature: ValidationData.signaturePKCS, content: ValidationData.payload)
+		let result = sut.validate(
+			signature: try getbase64EncodedData("pkcs1Signature"),
+			content: try getbase64EncodedData("pkcs1Payload") + Data("Wrong".utf8)
+		)
 		
 		// Then
 		expect(result) == false

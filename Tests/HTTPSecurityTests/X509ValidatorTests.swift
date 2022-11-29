@@ -285,8 +285,15 @@ class X509ValidatorTests: XCTestCase {
 func getCertificateData(_ fileName: String, extention: String = ".pem") throws -> Data {
 	
 	let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: fileName, withExtension: extention))
-	let certificateData = try Data(contentsOf: certificateUrl)
-	return certificateData
+	let content = try Data(contentsOf: certificateUrl)
+	return content
+}
+
+func getCertificateString(_ fileName: String, extention: String = ".pem") throws -> String {
+	
+	let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: fileName, withExtension: extention))
+	let content = try String(contentsOf: certificateUrl)
+	return content
 }
 
 func getAuthorityKeyIdentifierData(_ fileName: String, extention: String = ".txt") throws -> Data {
