@@ -1,5 +1,10 @@
 #!/usr/bin/env sh
 #
+# Used to generate a certificate with email and IP in the subject alternative name
+#
+# Outputs:
+# - emailAndIPCert.pem, the certificate with a email and IP as SAN
+
 TMPDIR=${TMPDIR:-/tmp}
 set -e
 
