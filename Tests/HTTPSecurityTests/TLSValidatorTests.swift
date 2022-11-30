@@ -1,9 +1,9 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import XCTest
 import Nimble
@@ -11,61 +11,41 @@ import Nimble
 @testable import HTTPSecurityObjC
 
 class TLSValidatorTests: XCTestCase {
-
+	
 	var sut: TLSValidator!
-
+	
 	override func setUp() {
-
+		
 		super.setUp()
 		sut = TLSValidator()
 	}
-
+	
 	// MARK: - Subject Alternative Name
-
+	
 	func test_subjectAlternativeNames_realLeaf() throws {
-
-		// Chain that is identical in subjectKeyIdentifier, issuerIdentifier, etc
-		// to a real one - but fake from the root down.
-		//
-		// See the Scripts directory:
-		//  gen_fake_bananen.sh         - takes real chain and makes a fake one from it.
-		//  gen_fake_cms_signed_json.sh - uses that to sign a bit of json.
-		//  gen_code.pl                 - generates below hardcoded data.
-		//
-		// For the scripts that have generated below.
-		//
-		// File:       : 1002.real
-		// SHA256 (DER): 19:C4:79:A1:D9:E9:BD:B3:D7:38:E8:41:45:70:16:FB:D8:15:C0:6B:71:96:12:F7:00:9A:1A:C7:E1:9B:F3:53
-		// Subject     : CN = api-ct.bananenhalen.nl
-		// Issuer      : C = US, O = Let's Encrypt, CN = R3
-		//
-
+		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certRealLeaf", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
-
+		// getting the chain certificates:
+		// openssl s_client -showcerts -servername holder-api.coronacheck.nl -connect holder-api.coronacheck.nl:443
+		
 		// When
-		let result = sut.validateSubjectAlternativeDNSName("api-ct.bananenhalen.nl", for: certificateData)
-
+		let result = sut.validateSubjectAlternativeDNSName(
+			"holder-api.coronacheck.nl",
+			for: try getCertificateData("holder-api.coronacheck.nl")
+		)
+		
 		// Then
 		expect(result) == true
 	}
-
+	
 	func test_subjectAlternativeNames_fakeLeaf() throws {
-
-		// Bizarre cert with odd extensions.
-		// Regenerate with openssl req -new -x509 -subj /CN=foo/ \
-		//      -addext "subjectAltName=otherName:foodofoo, otherName:1.2.3.4;UTF8,DNS:test1,DNS:test2,email:fo@bar,IP:1.2.3.4"  \
-		//      -nodes -keyout /dev/null |\
-		//            openssl x509 | pbcopy
-		//
-
+		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certWithEmailAndIP", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
-
+		// Use emailAndIP.sh to generate this certificate
+		let certificateData = try getCertificateData("emailAndIPCert")
+		
 		// When
-
+		
 		// Then
 		expect(self.sut.validateSubjectAlternativeDNSName("test1", for: certificateData)) == true
 		expect(self.sut.validateSubjectAlternativeDNSName("test2", for: certificateData)) == true
@@ -73,63 +53,46 @@ class TLSValidatorTests: XCTestCase {
 		// we should allow that to match.
 		expect(self.sut.validateSubjectAlternativeDNSName("fo@bar", for: certificateData)) == false
 	}
-
-	func test_subjectAlternativeNames_certWithSanRightAndCNWrong() throws {
-
-		// We have one case were the CN contains something like TestCentre 1234 and
-		// the subjectAlternativeName contains testcenter.nl. So a pure CN match fails.
-		//
-		// Regenerate with openssl req -new -x509 -subj /CN=Foobar Center 100/ \
-		//      -addext "subjectAltName=DNS:foobar.nl,DNS:someothercustomer.com"  \
-		//      -nodes -keyout /dev/null |\
-		//            openssl x509 | pbcopy
-		//
-
+	
+	func test_subjectAlternativeNames_mismatchSubjectAlternativeName_and_commonName() throws {
+		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certWithSanRightAndCNWrong", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
-
+		// UsemismatchSANAndCommonName.sh to generate this certificate
+		let certificateData = try getCertificateData("mismatchSANAndCommonNameCert")
+		
 		// When
-		let result = sut.validateSubjectAlternativeDNSName("foobar.nl", for: certificateData)
-
+		
 		// Then
-		expect(result) == false
+		expect(self.sut.validateSubjectAlternativeDNSName("foobar.nl", for: certificateData)) == true
+		expect(self.sut.validateSubjectAlternativeDNSName("oobar.nl", for: certificateData)) == false
 	}
-
-	func test_subjectAlternativeNames_certWithCNfakeright() throws {
-
+	
+	func test_subjectAlternativeNames_subjectAlternativeName_partialyMatches_commonName() throws {
+		
 		// Example of a cert we should not let pass - even though it looks good.
-		//
-		// Regenerate with openssl req -new -x509 -subj /CN=foobar.nl/ \
-		//      -addext "subjectAltName=DNS:certainlynotfoobar.nl,DNS:someothercustomer.com"  \
-		//      -nodes -keyout /dev/null |\
-		//            openssl x509 | pbcopy
-
+		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certWithCNfakeright", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
-
+		// Use partialMismatchSANAndCommonName.sh to generate this certificate
+		
 		// When
-		let result = sut.validateSubjectAlternativeDNSName("foobar.nl", for: certificateData)
-
+		let result = sut.validateSubjectAlternativeDNSName(
+			"foobar.nl",
+			for: try getCertificateData("partialMismatchSANAndCommonNameCert")
+		)
 		// Then
 		expect(result) == false
 	}
-
+	
 	func test_subjectAlternativeNames_certWithCNrightAndNoRelevantSAN() throws {
-
-		// Regenerate with openssl req -new -x509 -subj /CN=foobar.nl/ \
-		//      -addext "subjectAltName=IP:123.12.1.1"  \
-		//      -nodes -keyout /dev/null |\
-		//            openssl x509 | pbcopy
-
+		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certWithCNrightAndNoRelevantSAN", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
-
-		// When
-		let result = sut.validateSubjectAlternativeDNSName("foobar.nl", for: certificateData)
-
+		// Use ipOnly.sh to generate this certificate
+		
+		let result = sut.validateSubjectAlternativeDNSName(
+			"foobar.nl",
+			for: try getCertificateData("ipOnlyCert")
+		)
+		
 		// Then
 		expect(result) == false
 	}
@@ -137,13 +100,14 @@ class TLSValidatorTests: XCTestCase {
 	func test_compare_identicalCertificates() throws {
 		
 		// Given
-		let certificateUrl1 = try XCTUnwrap(Bundle.module.url(forResource: "holder-api.coronacheck.nl", withExtension: ".pem"))
-		let certificateData1 = try Data(contentsOf: certificateUrl1)
-		let certificateUrl2 = try XCTUnwrap(Bundle.module.url(forResource: "holder-api.coronacheck.nl", withExtension: ".pem"))
-		let certificateData2 = try Data(contentsOf: certificateUrl2)
+		// getting the chain certificates:
+		// openssl s_client -showcerts -servername holder-api.coronacheck.nl -connect holder-api.coronacheck.nl:443
 		
 		// When
-		let result = sut.compare(certificateData1, with: certificateData2)
+		let result = sut.compare(
+			try getCertificateData("holder-api.coronacheck.nl"),
+			with: try getCertificateData("holder-api.coronacheck.nl")
+		)
 		
 		// Then
 		expect(result) == true
@@ -152,13 +116,15 @@ class TLSValidatorTests: XCTestCase {
 	func test_compare_differentCertificates() throws {
 		
 		// Given
-		let certificateUrl1 = try XCTUnwrap(Bundle.module.url(forResource: "holder-api.coronacheck.nl", withExtension: ".pem"))
-		let certificateData1 = try Data(contentsOf: certificateUrl1)
-		let certificateUrl2 = try XCTUnwrap(Bundle.module.url(forResource: "Staat der Nederlanden Private Root CA - G1", withExtension: ".pem"))
-		let certificateData2 = try Data(contentsOf: certificateUrl2)
+		// getting the chain certificates:
+		// openssl s_client -showcerts -servername holder-api.coronacheck.nl -connect holder-api.coronacheck.nl:443
+		// Use Staat der Nederlanden Private Root CA - G1 certificate
 		
 		// When
-		let result = sut.compare(certificateData1, with: certificateData2)
+		let result = sut.compare(
+			try getCertificateData("holder-api.coronacheck.nl"),
+			with: try getCertificateData("Staat der Nederlanden Private Root CA - G1")
+		)
 		
 		// Then
 		expect(result) == false
