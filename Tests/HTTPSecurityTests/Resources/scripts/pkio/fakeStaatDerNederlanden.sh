@@ -68,4 +68,5 @@ openssl pkcs12 -export -out client.pfx -in client.pub -inkey client.key -certfil
 KEYID=$($OPENSSL x509 -in client.crt -noout -ext authorityKeyIdentifier | sed -e 's/.*Identifier://' -e 's/keyid/0x04, 0x14/g' -e 's/:/, 0x/g')
 echo $KEYID > authorityKeyIdentifier.txt
 
-mv ca.pem fakePKIOverheidCert.pem
+mv ca.pem ../../fakePKIOverheidCert.pem
+mv authorityKeyIdentifier.txt ../../authorityKeyIdentifier.txt

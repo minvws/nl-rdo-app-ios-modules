@@ -93,5 +93,9 @@ echo $JSON_B64 > deepPayload.txt
 echo $KEYID > deepAuthorityKeyIdentifier.txt
 rm chain.pem
 rm client.crt
+mv deepChainCert.pem ../../deepChainCert.pem
+mv deepSignature.txt ../../deepSignature.txt
+mv deepPayload.txt ../../deepPayload.txt
+mv deepAuthorityKeyIdentifier.txt ../../deepAuthorityKeyIdentifier.txt
 
 echo "Done!"

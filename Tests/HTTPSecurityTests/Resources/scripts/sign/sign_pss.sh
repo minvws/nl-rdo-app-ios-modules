@@ -26,7 +26,10 @@ fi
 #fi
 
 JSON_B64=$(base64 -i "$JSON")
-SIG_B64=$($OPENSSL cms -in "$JSON" -sign -outform DER -signer "$CERT" -certfile "$CHAIN" -binary  -keyopt rsa_padding_mode:pkcs1 | base64)
+SIG_B64=$($OPENSSL cms -in "$JSON" -sign -outform DER -signer "$CERT" -certfile "$CHAIN" -binary  -keyopt rsa_padding_mode:pss | base64)
 
-echo $SIG_B64 > pkcs1Signature.txt
-echo $JSON_B64 > pkcs1Payload.txt
+echo $SIG_B64 > pssSignature.txt
+echo $JSON_B64 > pssPayload.txt
+
+mv pssSignature.txt ../../pssSignature.txt
+mv pssPayload.txt ../../pssPayload.txt

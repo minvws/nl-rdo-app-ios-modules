@@ -79,5 +79,9 @@ echo $SIG_B64 > noCommonNameSignature.txt
 echo $JSON_B64 > noCommonNamePayload.txt
 echo $KEYID > noCommonNameAuthorityKeyIdentifier.txt
 rm ca.* chain.pem client.* full-chain.pem sub-ca.*
+mv noCommonNameCert.pem ../../noCommonNameCert.pem
+mv noCommonNameSignature.txt ../../noCommonNameSignature.txt
+mv noCommonNamePayload.txt ../../noCommonNamePayload.txt
+mv noCommonNameAuthorityKeyIdentifier.txt ../../noCommonNameAuthorityKeyIdentifier.txt
 
 echo "Done!"
