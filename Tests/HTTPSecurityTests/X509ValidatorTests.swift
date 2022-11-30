@@ -302,7 +302,6 @@ func getAuthorityKeyIdentifierData(_ fileName: String, extention: String = ".txt
 	let content = try String(contentsOf: url).trimmingCharacters(in: .whitespacesAndNewlines)
 	var result = Data()
 	content.components(separatedBy: ",").forEach { element in
-		print("element: \(element)")
 		if let hexData = element.trimmingCharacters(in: .whitespacesAndNewlines).data(using: .hexadecimal) {
 			result.append(hexData)
 		}
