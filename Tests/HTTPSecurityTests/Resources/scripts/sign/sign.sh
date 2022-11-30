@@ -7,7 +7,7 @@ if [ $# -gt 2 ]; then
 	exit 1
 fi
 OPENSSL=${OPENSSL:-/opt/homebrew/Cellar/openssl\@1.1/1.1.1s/bin/openssl}
-JSON=${1:-../payload.json}
+JSON=${1:-../../payload.json}
 CERT=${2:-../pkio/client.crt}
 CHAIN=${3:-../pkio/chain.pem}
 

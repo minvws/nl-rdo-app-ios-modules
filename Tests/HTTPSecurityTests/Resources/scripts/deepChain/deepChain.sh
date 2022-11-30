@@ -11,7 +11,7 @@ TMPDIR=${TMPDIR:-/tmp}
 set -e
 
 OPENSSL=${OPENSSL:-/opt/homebrew/Cellar/openssl\@1.1/1.1.1s/bin/openssl}
-JSON=${1:-../payload.json}
+JSON=${1:-../../payload.json}
 
 if $OPENSSL version | grep -q LibreSSL; then
 	echo Sorry - OpenSSL is needed.

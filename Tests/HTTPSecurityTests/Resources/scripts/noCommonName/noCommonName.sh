@@ -4,7 +4,7 @@ TMPDIR=${TMPDIR:-/tmp}
 set -e
 
 OPENSSL=${OPENSSL:-/opt/homebrew/Cellar/openssl\@1.1/1.1.1s/bin/openssl}
-JSON=${1:-../payload.json}
+JSON=${1:-../../payload.json}
 
 # Create a 'staat der nederlanden' root certificate that looks like
 # the real thing. 
