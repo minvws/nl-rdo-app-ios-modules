@@ -93,20 +93,6 @@ shift @chain;
 for my $cert (reverse(@chain)) { print FH $cert; };
 close(FH);
 
-## Sanity check on our entire chain; with just the CA.
-##
-#$cmd = "openssl verify -CAfile ca.pem -purpose any $untrusted $last";
-#print "Check fake with \n\t$cmd\n\n";
-#system($cmd);
-#$cmd =~ s/.pem/.real/g;
-#print "Check real with \n\t$cmd\n\n";
-#system($cmd);
-
-## Output key identifier of leaf cerrt
-##`openssl x509 -in 1002.pem -ext authorityKeyIdentifier -noout | sed -e 's/.*Identifier://' -e 's/keyid/0x04, 0x14/g' -e 's/:/, 0x/g' | grep 0x | xxd -r -p >  leaf.issuer-keyid`;
-##`cat 1000.pem 1001.pem > chain.pem`
-#
-
 # Cleanup files no longer needed
 system("rm tmp.pem ca.crt ca.pem chain.pem 1000.pem 1001.pem 1002.pem");
 
