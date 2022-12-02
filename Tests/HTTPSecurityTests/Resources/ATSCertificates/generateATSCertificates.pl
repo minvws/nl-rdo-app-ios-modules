@@ -22,7 +22,7 @@ system($cmd);
 #
 `openssl x509 -in $ca -outform DER -out $cader`;
 
-# Fetch full chain for the bananen API server
+# Fetch full chain for the site
 
 open(STDIN,'false | openssl s_client -showcerts -servername roolproductions.com -connect roolproductions.com:443 |')
 	or die $!;
