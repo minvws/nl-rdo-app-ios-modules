@@ -75,6 +75,7 @@ for my $cert (@chain) {
 	print FH $cert;
 	close(FH);
 
+	# resign tool: https://github.com/ehn-dcc-development/x509-resign.git
 	$cmd = "./resign -Ksi $idx.real $ca $ca > $idx.pem && openssl x509 -days 365 -in $idx.pem -out $idx.fake";
 	print "$cmd\n";
 	system($cmd);
