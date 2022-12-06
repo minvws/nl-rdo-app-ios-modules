@@ -19,26 +19,31 @@ class AlwaysAllowSignatureValidatorTests: XCTestCase {
 		sut = AlwaysAllowSignatureValidator()
 	}
 	
-	func test_validSignature() {
+	func test_validSignature() throws {
 		
 		// Given
 		
 		// When
-		let result = sut.validate(signature: ValidationData.signaturePKCS, content: ValidationData.payload)
+		let result = sut.validate(
+			signature: try getbase64EncodedData("pkcs1Signature"),
+			content: try getbase64EncodedData("pkcs1Payload")
+		)
 		
 		// Then
 		expect(result) == true
 	}
 	
-	func test_invalidSignature() {
+	func test_invalidSignature() throws {
 		
 		// Given
 		
 		// When
-		let result = sut.validate(signature: ValidationData.signaturePKCS, content: ValidationData.wrongPayload)
+		let result = sut.validate(
+			signature: try getbase64EncodedData("pkcs1Signature"),
+			content: try getbase64EncodedData("pkcs1Payload") + Data("Wrong".utf8)
+		)
 		
 		// Then
 		expect(result) == true
 	}
-	
 }

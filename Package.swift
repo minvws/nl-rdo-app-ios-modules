@@ -47,14 +47,14 @@ let package = Package(
 	targets: [
 		.target(
 			name: "HTTPSecurity",
-			dependencies: ["HTTPSecurityObjC", "Logging"],
-			resources: [.process("TestCertificates")]),
+			dependencies: ["HTTPSecurityObjC", "Logging"]),
 		.target(
 			name: "HTTPSecurityObjC",
 			dependencies: ["OpenSSL"]),
 		.testTarget(
 			name: "HTTPSecurityTests",
-			dependencies: ["HTTPSecurity", "Nimble"]),
+			dependencies: ["HTTPSecurity", "Nimble"],
+			resources: [.process("Resources")]),
 		.target(
 			name: "Logging",
 			dependencies: [],

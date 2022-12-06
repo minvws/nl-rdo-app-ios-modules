@@ -23,91 +23,101 @@ class X509ValidatorTests: XCTestCase {
 	func test_validateCMSSignature_padding_pkcs_validPayload() throws {
 
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
-			ValidationData.signaturePKCS,
-			contentData: ValidationData.payload,
-			certificateData: certificateData,
-			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.nl"
+			try getbase64EncodedData("pkcs1Signature"),
+			contentData: try getbase64EncodedData("pkcs1Payload"),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
+			requiredCommonNameContent: ".rdobeheer.nl"
 		)
 
 		// Then
 		expect(validation) == true
 	}
 
-	func test_validateCMSSignature__padding_pkcs_wrongPayload() throws {
+	func test_validateCMSSignature_padding_pkcs_wrongPayload() throws {
 
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
-			ValidationData.signaturePKCS,
-			contentData: ValidationData.wrongPayload,
-			certificateData: certificateData,
-			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.nl"
+			try getbase64EncodedData("pkcs1Signature"),
+			contentData: try getbase64EncodedData("pkcs1Payload") + Data("Wrong".utf8),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
+			requiredCommonNameContent: ".rdobeheer.nl"
 		)
 
 		// Then
 		expect(validation) == false
 	}
 
-	func test_validateCMSSignature__padding_pss_validPayload() throws {
+	func test_validateCMSSignature_padding_pss_validPayload() throws {
 
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
-			ValidationData.signaturePSS,
-			contentData: ValidationData.payload,
-			certificateData: certificateData,
-			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.nl"
+			try getbase64EncodedData("pssSignature"),
+			contentData: try getbase64EncodedData("pssPayload"),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
+			requiredCommonNameContent: ".rdobeheer.nl"
 		)
 
 		// Then
 		expect(validation) == true
 	}
 
-	func test_validateCMSSignature__padding_pss_wrongPayload() throws {
+	func test_validateCMSSignature_padding_pss_wrongPayload() throws {
 
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
-			ValidationData.wrongPayload,
-			contentData: ValidationData.payload,
-			certificateData: certificateData,
-			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.nl"
+			try getbase64EncodedData("pssSignature"),
+			contentData: try getbase64EncodedData("pssPayload") + Data("Wrong".utf8),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
+			requiredCommonNameContent: ".rdobeheer.nl"
 		)
 
 		// Then
 		expect(validation) == false
 	}
 
-	func test_validateCMSSignature__test_pinning_wrongCommonName() throws {
+	func test_validateCMSSignature_test_pinning_wrongCommonName() throws {
 
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
-			ValidationData.signaturePKCS,
-			contentData: ValidationData.payload,
-			certificateData: certificateData,
-			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
+			try getbase64EncodedData("pkcs1Signature"),
+			contentData: try getbase64EncodedData("pkcs1Payload"),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
 			requiredCommonNameContent: ".coronacheck.nl"
 		)
 
@@ -115,37 +125,41 @@ class X509ValidatorTests: XCTestCase {
 		expect(validation) == false
 	}
 
-	func test_validateCMSSignature__test_pinning_commonNameAsPartOfDomain() throws {
+	func test_validateCMSSignature_test_pinning_commonNameAsPartOfDomain() throws {
 
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
-			ValidationData.signaturePKCS,
-			contentData: ValidationData.payload,
-			certificateData: certificateData,
-			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.nl.xx.nl"
+			try getbase64EncodedData("pkcs1Signature"),
+			contentData: try getbase64EncodedData("pkcs1Payload"),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
+			requiredCommonNameContent: ".rdobeheer.nl.malicioushacker.nl"
 		)
 
 		// Then
 		expect(validation) == false
 	}
 
-	func test_validateCMSSignature__test_pinning_emptyCommonName() throws {
+	func test_validateCMSSignature_test_pinning_emptyCommonName() throws {
 
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
-			ValidationData.signaturePKCS,
-			contentData: ValidationData.payload,
-			certificateData: certificateData,
-			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
+			try getbase64EncodedData("pkcs1Signature"),
+			contentData: try getbase64EncodedData("pkcs1Payload"),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
 			requiredCommonNameContent: ""
 		)
 
@@ -153,36 +167,40 @@ class X509ValidatorTests: XCTestCase {
 		expect(validation) == true
 	}
 
-	func test_validateCMSSignature__test_pinning_emptyAuthorityKeyIdentifier() throws {
+	func test_validateCMSSignature_test_pinning_emptyAuthorityKeyIdentifier() throws {
 
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
-			ValidationData.signaturePKCS,
-			contentData: ValidationData.payload,
-			certificateData: certificateData,
+			try getbase64EncodedData("pkcs1Signature"),
+			contentData: try getbase64EncodedData("pkcs1Payload"),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
 			authorityKeyIdentifier: nil,
-			requiredCommonNameContent: "coronatester.nl"
+			requiredCommonNameContent: ".rdobeheer.nl"
 		)
 
 		// Then
 		expect(validation) == true
 	}
 
-	func test_validateCMSSignature__test_pinning_emptyAuthorityKeyIdentifier_emptyCommonName() throws {
+	func test_validateCMSSignature_test_pinning_emptyAuthorityKeyIdentifier_emptyCommonName() throws {
 
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use fakeStaatDerNederlanden.sh to generate this certificate
+		// Use sigh.sh to generate the pkcs1 signature
+		// Use sigh_pss.sh to generate the pss signature
+		// Use cleanup.sh to remove the unneeded files
 
 		// When
 		let validation = sut.validateCMSSignature(
-			ValidationData.signaturePKCS,
-			contentData: ValidationData.payload,
-			certificateData: certificateData,
+			try getbase64EncodedData("pkcs1Signature"),
+			contentData: try getbase64EncodedData("pkcs1Payload"),
+			certificateData: try getCertificateData("fakePKIOverheidCert"),
 			authorityKeyIdentifier: nil,
 			requiredCommonNameContent: ""
 		)
@@ -192,65 +210,134 @@ class X509ValidatorTests: XCTestCase {
 	}
 
 	func test_validateCMSSignature_verydeep() throws {
-
-		// Use long-chain.sh to generate this certificate (0.pem -> certDeepChain.pem)
-
+		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certDeepChain", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
-
+		// Use deepChain.sh to generate this certificate
+		
 		// When
 		let validation = sut.validateCMSSignature(
-			ValidationData.deepSignature,
-			contentData: ValidationData.payload,
-			certificateData: certificateData,
-			authorityKeyIdentifier: ValidationData.deepAuthorityKeyIdentifier,
+			try getbase64EncodedData("deepSignature"),
+			contentData: try getbase64EncodedData("deepPayload"),
+			certificateData: try getCertificateData("deepChainCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("deepAuthorityKeyIdentifier"),
 			requiredCommonNameContent: "leaf"
 		)
-
+		
 		// Then
 		expect(validation) == true
 	}
-
-	func test_validateCMSSignature_invalidAuthorityKeyIdentifier() throws {
-
-		// Use long-chain.sh to generate this certificate
-
+	
+	func test_validateCMSSignature_verydeep_invalidAuthorityKeyIdentifier() throws {
+		
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certDeepChain", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
-
+		// Use deepChain.sh to generate this certificate
+		
 		// When
 		let validation = sut.validateCMSSignature(
-			ValidationData.deepSignature,
-			contentData: ValidationData.payload,
-			certificateData: certificateData,
-			authorityKeyIdentifier: ValidationData.authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.nl"
+			try getbase64EncodedData("deepSignature"),
+			contentData: try getbase64EncodedData("deepPayload"),
+			certificateData: try getCertificateData("deepChainCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("authorityKeyIdentifier"),
+			requiredCommonNameContent: "leaf"
 		)
-
+		
 		// Then
 		expect(validation) == false
 	}
 
 	func test_validateCMSSignature_noCommonName() throws {
 
-		// Use long-chain.sh to generate this certificate
-
 		// Given
-		let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: "certWithoutCN", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
+		// Use noCommonName.sh to generate this certificate
 
 		// When
 		let validation = sut.validateCMSSignature(
-			ValidationData.signatureNoCommonName,
-			contentData: ValidationData.payload,
-			certificateData: certificateData,
-			authorityKeyIdentifier: ValidationData.noCommonNameAuthorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester..nl"
+			try getbase64EncodedData("noCommonNameSignature"),
+			contentData: try getbase64EncodedData("noCommonNamePayload"),
+			certificateData: try getCertificateData("noCommonNameCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("noCommonNameAuthorityKeyIdentifier"),
+			requiredCommonNameContent: ".rdobeheer.nl"
 		)
 
 		// Then
 		expect(validation) == false
 	}
+	
+	func test_validateCMSSignature_noCommonName_noRequiredName() throws {
+
+		// Given
+		// Use noCommonName.sh to generate this certificate
+
+		// When
+		let validation = sut.validateCMSSignature(
+			try getbase64EncodedData("noCommonNameSignature"),
+			contentData: try getbase64EncodedData("noCommonNamePayload"),
+			certificateData: try getCertificateData("noCommonNameCert"),
+			authorityKeyIdentifier: try getAuthorityKeyIdentifierData("noCommonNameAuthorityKeyIdentifier"),
+			requiredCommonNameContent: ""
+		)
+
+		// Then
+		expect(validation) == true
+	}
 }
+
+func getCertificateData(_ fileName: String, extention: String = ".pem") throws -> Data {
+	
+	let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: fileName, withExtension: extention))
+	let content = try Data(contentsOf: certificateUrl)
+	return content
+}
+
+func getCertificateString(_ fileName: String, extention: String = ".pem") throws -> String {
+	
+	let certificateUrl = try XCTUnwrap(Bundle.module.url(forResource: fileName, withExtension: extention))
+	let content = try String(contentsOf: certificateUrl)
+	return content
+}
+
+func getAuthorityKeyIdentifierData(_ fileName: String, extention: String = ".txt") throws -> Data {
+
+	let url = try XCTUnwrap(Bundle.module.url(forResource: fileName, withExtension: extention))
+	let content = try String(contentsOf: url).trimmingCharacters(in: .whitespacesAndNewlines)
+	var result = Data()
+	content.components(separatedBy: ",").forEach { element in
+		if let hexData = element.trimmingCharacters(in: .whitespacesAndNewlines).data(using: .hexadecimal) {
+			result.append(hexData)
+		}
+	}
+	return result
+}
+
+func getbase64EncodedData(_ fileName: String, extention: String = ".txt") throws -> Data {
+	
+	let url = try XCTUnwrap(Bundle.module.url(forResource: fileName, withExtension: extention))
+	let content = try String(contentsOf: url).trimmingCharacters(in: .newlines)
+	let base64 = try XCTUnwrap(Data(base64Encoded: content))
+	return base64
+}
+
+extension String {
+	 enum ExtendedEncoding {
+		 case hexadecimal
+	 }
+
+	 func data(using encoding: ExtendedEncoding) -> Data? {
+		 let hexStr = self.dropFirst(self.hasPrefix("0x") ? 2 : 0)
+
+		 guard hexStr.count % 2 == 0 else { return nil }
+
+		 var newData = Data(capacity: hexStr.count / 2)
+
+		 var indexIsEven = true
+		 for index in hexStr.indices {
+			 if indexIsEven {
+				 let byteRange = index...hexStr.index(after: index)
+				 guard let byte = UInt8(hexStr[byteRange], radix: 16) else { return nil }
+				 newData.append(byte)
+			 }
+			 indexIsEven.toggle()
+		 }
+		 return newData
+	 }
+ }
