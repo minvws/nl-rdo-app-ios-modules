@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 #
-# Used to generate a certificate with partial mismatch between SAN and CN
+# Used to generate a certificate with mismatch between SAN and CN
 #
 # Outputs:
-# - emailAndIPCert.pem, the certificate with a partial mismatch between SAN and CN
+# - mismatchSANAndCommonNameCert.pem, the certificate with a mismatch between SAN and CN
 
 TMPDIR=${TMPDIR:-/tmp}
 set -e
@@ -21,10 +21,10 @@ if ! $OPENSSL version | grep -q 1\.; then
 fi
 
 $OPENSSL req -x509 -days 365 -new \
-	-addext "subjectAltName=DNS:certainlynotfoobar.nl,DNS:someothercustomer.com" \
-	-subj '/CN=foobar.nl' \
+	-addext "subjectAltName=DNS:foobar.nl,DNS:someothercustomer.com" \
+	-subj '/CN=Foobar Center 100' \
 	-out ca.pem -keyout ca.key -nodes
 
 # Cleanup
 rm ca.key
-mv ca.pem ../../partialMismatchSANAndCommonNameCert.pem
+mv ca.pem mismatchSANAndCommonNameCert.pem
