@@ -27,4 +27,4 @@ $OPENSSL req -x509 -days 365 -new \
 
 # Cleanup
 rm ca.key
-mv ca.pem ../../ipOnlyCert.pem
+mv ca.pem ipOnlyCert.pem
