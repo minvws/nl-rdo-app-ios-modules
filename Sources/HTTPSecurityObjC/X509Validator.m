@@ -113,7 +113,7 @@ void print_pkey_as_hex(EVP_PKEY *pkey) {
 		}
 	}
 
-	sk_GENERAL_NAME_pop_free(gens, GENERAL_NAME_free);
+	if (gens != NULL) { sk_GENERAL_NAME_pop_free(gens, GENERAL_NAME_free); }
 	X509_free(certificate); certificate = NULL;
 	return results;
 }
@@ -153,6 +153,7 @@ void print_pkey_as_hex(EVP_PKEY *pkey) {
 	
 	ASN1_INTEGER *certificateSerial = X509_get_serialNumber(certificate);
 	if (certificateSerial == NULL) {
+		ASN1_INTEGER_free(expectedSerial); expectedSerial = NULL;
 		X509_free(certificate); certificate = NULL;
 		return NO;
 	}
@@ -194,8 +195,8 @@ void print_pkey_as_hex(EVP_PKEY *pkey) {
 	isMatch = ASN1_OCTET_STRING_cmp(expectedSubjectKeyIdentifier, certificateSubjectKeyIdentifier) == 0;
 	
 errit:
-	X509_free(certificate); certificate = NULL;
-	ASN1_OCTET_STRING_free(expectedSubjectKeyIdentifier); expectedSubjectKeyIdentifier = NULL;
+	if (certificate != NULL) { X509_free(certificate); certificate = NULL; }
+	if (expectedSubjectKeyIdentifier != NULL) { ASN1_OCTET_STRING_free(expectedSubjectKeyIdentifier); expectedSubjectKeyIdentifier = NULL; }
 	
 	return isMatch;
 }
@@ -231,7 +232,8 @@ errit:
 	NSLog(@"validateAuthorityKeyIdentifierData OK.");
 	print_octed_as_hex(expectedAuthorityKeyIdentifier);
 #endif
-	ASN1_OCTET_STRING_free(expectedAuthorityKeyIdentifier);
+	if (expectedAuthorityKeyIdentifier != NULL) { ASN1_OCTET_STRING_free(expectedAuthorityKeyIdentifier); expectedAuthorityKeyIdentifier = NULL; }
+	
 	return isMatch;
 }
 
@@ -314,7 +316,7 @@ errit:
 		fprintf(stderr,"#%d\t",cnt+1);
 		print_certificate(cert);
 #endif
-		X509_free(cert); cert = NULL;
+		if (cert != NULL) { X509_free(cert); cert = NULL; }
 	};
 	ERR_clear_error(); // as we have a feof() bio read error.
 
@@ -365,8 +367,8 @@ errit:
 	}
 
 	if (sk_X509_num(signers) != 1) {
-		sk_X509_pop_free(signers, X509_free);
-		EXITOUT("Not exactly one signer in PCKS#7 signatureBlob");
+		if (signers != NULL) { sk_X509_pop_free(signers, X509_free); }
+		EXITOUT("Not exactly one signer in CMS signatureBlob");
 	}
 
 	signingCert = sk_X509_value(signers, 0);
@@ -379,16 +381,16 @@ errit:
 	if (expectedAuthorityKeyIdentifierDataOrNil.length) {
 		if (![self validateAuthorityKeyIdentifierData: expectedAuthorityKeyIdentifierDataOrNil
 								   signingCertificate: signingCert]) {
-			sk_X509_pop_free(signers, X509_free);
-			X509_free(signingCert);
+			if (signers != NULL) { sk_X509_pop_free(signers, X509_free); }
+			if (signingCert != NULL) { X509_free(signingCert);}
 			EXITOUT("invalid isAuthorityKeyIdentifierValid");
 		}
 	}
 	if (requiredCommonNameContentOrNil.length) {
 		if (![self validateCommonNameForCertificate: signingCert
 									requiredContent: requiredCommonNameContentOrNil]) {
-			sk_X509_pop_free(signers, X509_free);
-			X509_free(signingCert);
+			if (signers != NULL) { sk_X509_pop_free(signers, X509_free); }
+			if (signingCert != NULL) { X509_free(signingCert); }
 			EXITOUT("invalid isCommonNameValid");
 		}
 	}
@@ -399,13 +401,13 @@ errit:
 	result = YES;
 
 errit:
-	X509_VERIFY_PARAM_free(verifyParameters); verifyParameters = NULL;
-	X509_STORE_free(store); store = NULL;
-	CMS_ContentInfo_free(cms); cms = NULL;
-	BIO_free(cmsBlob); cmsBlob = NULL;
-	BIO_free(signatureBlob); signatureBlob = NULL;
-	BIO_free(contentBlob); contentBlob = NULL;
-	BIO_free(certificateBlob); certificateBlob = NULL;
+	if (verifyParameters != NULL) { X509_VERIFY_PARAM_free(verifyParameters); verifyParameters = NULL; }
+	if (store != NULL) { X509_STORE_free(store); store = NULL; }
+	if (cms != NULL) { CMS_ContentInfo_free(cms); cms = NULL; }
+	if (cmsBlob != NULL) { BIO_free(cmsBlob); cmsBlob = NULL; }
+	if (signatureBlob != NULL) { BIO_free(signatureBlob); signatureBlob = NULL; }
+	if (contentBlob != NULL) { BIO_free(contentBlob); contentBlob = NULL; }
+	if (certificateBlob != NULL) { BIO_free(certificateBlob); certificateBlob = NULL; }
 	signers = NULL;
 	signingCert = NULL;
 
