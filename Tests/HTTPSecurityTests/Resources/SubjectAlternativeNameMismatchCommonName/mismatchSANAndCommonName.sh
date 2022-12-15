@@ -27,4 +27,4 @@ $OPENSSL req -x509 -days 365 -new \
 
 # Cleanup
 rm ca.key
-mv ca.pem ../../mismatchSANAndCommonNameCert.pem
+mv ca.pem mismatchSANAndCommonNameCert.pem
