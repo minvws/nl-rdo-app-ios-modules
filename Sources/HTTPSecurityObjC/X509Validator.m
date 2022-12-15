@@ -368,7 +368,7 @@ errit:
 
 	if (sk_X509_num(signers) != 1) {
 		if (signers != NULL) { sk_X509_pop_free(signers, X509_free); }
-		EXITOUT("Not exactly one signer in PCKS#7 signatureBlob");
+		EXITOUT("Not exactly one signer in CMS signatureBlob");
 	}
 
 	signingCert = sk_X509_value(signers, 0);
