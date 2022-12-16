@@ -381,16 +381,12 @@ errit:
 	if (expectedAuthorityKeyIdentifierDataOrNil.length) {
 		if (![self validateAuthorityKeyIdentifierData: expectedAuthorityKeyIdentifierDataOrNil
 								   signingCertificate: signingCert]) {
-			if (signers != NULL) { sk_X509_pop_free(signers, X509_free); }
-			if (signingCert != NULL) { X509_free(signingCert);}
 			EXITOUT("invalid isAuthorityKeyIdentifierValid");
 		}
 	}
 	if (requiredCommonNameContentOrNil.length) {
 		if (![self validateCommonNameForCertificate: signingCert
 									requiredContent: requiredCommonNameContentOrNil]) {
-			if (signers != NULL) { sk_X509_pop_free(signers, X509_free); }
-			if (signingCert != NULL) { X509_free(signingCert); }
 			EXITOUT("invalid isCommonNameValid");
 		}
 	}
