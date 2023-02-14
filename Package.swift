@@ -36,10 +36,10 @@ let package = Package(
 			branch: "feature/custom-url-support"),
 		.package(
 			url: "https://github.com/AliSoftware/OHHTTPStubs.git",
-			from: "9.0.0"),
+			from: "9.1.0"),
 		.package(
 			url: "https://github.com/krzyzanowskim/OpenSSL.git",
-			from: "1.1.1900"),
+			from: "1.1.2000"),
 		.package(
 			url: "https://github.com/Quick/Nimble.git",
 			from: "10.0.0")
