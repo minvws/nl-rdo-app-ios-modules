@@ -15,8 +15,15 @@ public class AppTransportSecurityChecker {
 	
 	internal func certificateFromPEM(certificateAsPemData: Data) -> SecCertificate? {
 		
-		let length = certificateAsPemData.count - 26
-		let derb64 = certificateAsPemData.subdata(in: 28 ..< length)
+		// Check for extra newlines at the end
+		var certifateAsString = String(decoding: certificateAsPemData, as: UTF8.self)
+		while certifateAsString.hasSuffix("\n\n") {
+			certifateAsString = String(certifateAsString.dropLast(2))
+		}
+		guard let certificateAsData = certifateAsString.data(using: .utf8) else { return nil }
+		
+		let length = certificateAsData.count - 26
+		let derb64 = certificateAsData.subdata(in: 28 ..< length)
 		
 		var str = String(decoding: derb64, as: UTF8.self)
 		str = str.replacingOccurrences(of: "\n", with: "")
