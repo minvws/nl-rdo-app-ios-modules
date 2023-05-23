@@ -331,4 +331,21 @@ class AppTransportSecurityCheckerTests: XCTestCase {
 		// Then
 		expect(result) == false
 	}
+	
+	func test_realServerTrust_leafWithExtraNewLine() throws {
+		
+		// Given
+		let extraNewLineLeaf = try getCertificateData("roolExtraNewLine")
+		realLeafCert = sut.certificateFromPEM(certificateAsPemData: extraNewLineLeaf)
+		let serverTrust = try XCTUnwrap(realServerTrust)
+		
+		// When
+		let result = sut.check(
+			serverTrust: serverTrust,
+			policies: [policy],
+			trustedCertificates: [])
+		
+		// Then
+		expect(result) == true
+	}
 }
