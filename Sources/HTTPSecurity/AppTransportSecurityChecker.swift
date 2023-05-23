@@ -18,7 +18,7 @@ public class AppTransportSecurityChecker {
 		// Check for extra newlines at the end
 		var certifateAsString = String(decoding: certificateAsPemData, as: UTF8.self)
 		while certifateAsString.hasSuffix("\n\n") {
-			certifateAsString = String(certifateAsString.dropLast(2))
+			certifateAsString = String(certifateAsString.dropLast())
 		}
 		guard let certificateAsData = certifateAsString.data(using: .utf8) else { return nil }
 		

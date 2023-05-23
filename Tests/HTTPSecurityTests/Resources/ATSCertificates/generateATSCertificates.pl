@@ -108,6 +108,9 @@ system("mv 1001.real lets-encrypt-r3.pem");
 system("mv 1001.fake lets-encrypt-r3.fake");
 
 system("mv 1002.real rool.pem");
+system("cp rool.pem roolExtraNewLine.pem");
+system("echo >> roolExtraNewLine.pem");
+
 system("mv 1002.fake rool.fake");
 
 print("DONE renaming certificates\n");
