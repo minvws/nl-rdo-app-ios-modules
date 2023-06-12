@@ -32,16 +32,16 @@ let package = Package(
 		.package(
 			// A fork has been used to support both universal links and url schemes
 			// Forked from: https://github.com/openid/AppAuth-iOS
-			url: "https://github.com/Rool/AppAuth-iOS.git",
+			url: "https://github.com/Rool/AppAuth-iOS",
 			branch: "feature/custom-url-support"),
 		.package(
-			url: "https://github.com/AliSoftware/OHHTTPStubs.git",
+			url: "https://github.com/AliSoftware/OHHTTPStubs",
 			from: "9.1.0"),
 		.package(
-			url: "https://github.com/krzyzanowskim/OpenSSL.git",
-			from: "1.1.2000"),
+			url: "https://github.com/krzyzanowskim/OpenSSL",
+			from: "1.1.2100"),
 		.package(
-			url: "https://github.com/Quick/Nimble.git",
+			url: "https://github.com/Quick/Nimble",
 			from: "10.0.0")
 	],
 	targets: [
