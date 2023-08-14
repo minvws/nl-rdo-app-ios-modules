@@ -3,7 +3,7 @@
     {
       "identity" : "appauth-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Rool/AppAuth-iOS.git",
+      "location" : "https://github.com/Rool/AppAuth-iOS",
       "state" : {
         "branch" : "feature/custom-url-support",
         "revision" : "46e9b6d35d365066b3d8b7cf86672fc68451a09b"
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/krzyzanowskim/OpenSSL.git",
       "state" : {
-        "revision" : "0c70e4b7d22411a7fe3ff59b913d5b760b735ce1",
-        "version" : "1.1.2100"
+        "revision" : "0faf71a188bcfdf0245cab42886b9b240ca71c52",
+        "version" : "1.1.2200"
       }
     }
   ],

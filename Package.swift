@@ -39,7 +39,7 @@ let package = Package(
 			from: "9.1.0"),
 		.package(
 			url: "https://github.com/krzyzanowskim/OpenSSL",
-			from: "1.1.2100"),
+			from: "1.1.2200"),
 		.package(
 			url: "https://github.com/Quick/Nimble",
 			from: "10.0.0")
