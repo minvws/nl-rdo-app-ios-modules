@@ -42,7 +42,7 @@ let package = Package(
 			from: "1.1.2200"),
 		.package(
 			url: "https://github.com/Quick/Nimble",
-			from: "10.0.0")
+			exact: "10.0.0")
 	],
 	targets: [
 		.target(
