@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/krzyzanowskim/OpenSSL",
       "state" : {
-        "revision" : "0f881c03cfe4406274aa6267c4710e2996d01867",
-        "version" : "3.1.2000"
+        "revision" : "ce8d8adda6bac2c0aacde7fea3c368906e8a66c0",
+        "version" : "3.1.3000"
       }
     }
   ],
