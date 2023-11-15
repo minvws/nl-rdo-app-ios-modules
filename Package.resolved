@@ -6,7 +6,7 @@
       "location" : "https://github.com/Rool/AppAuth-iOS",
       "state" : {
         "branch" : "feature/custom-url-support",
-        "revision" : "7e809680efcbe5fd3d7d45edc8a34a0f24f90b10"
+        "revision" : "bbb95f33b4169a57039d59a9cc0cf90e61c51035"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mattgallagher/CwlPreconditionTesting.git",
       "state" : {
-        "revision" : "a23ded2c91df9156628a6996ab4f347526f17b6b",
-        "version" : "2.1.2"
+        "revision" : "dc9af4781f2afdd1e68e90f80b8603be73ea7abc",
+        "version" : "2.2.0"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/krzyzanowskim/OpenSSL",
       "state" : {
-        "revision" : "5ae21d0c6dd75356df6a1b68d7ab2153f3b8181f",
-        "version" : "3.1.3001"
+        "revision" : "2fec2333eb8e8a6acd08bc95a6edf1c0f391c42f",
+        "version" : "3.1.4000"
       }
     }
   ],

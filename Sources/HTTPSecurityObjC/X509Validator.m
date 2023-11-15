@@ -433,7 +433,7 @@ errit:
 	EVP_PKEY * ptc = X509_get0_pubkey(trustedCertificate);
 	EVP_PKEY * tc = X509_get0_pubkey(certificate);
 	
-	isMatch = isMatch && ((1 == EVP_PKEY_cmp(ptc, tc)) ? YES : NO);
+	isMatch = isMatch && ((1 == EVP_PKEY_eq(ptc, tc)) ? YES : NO);
 	
 	X509_free(certificate); certificate = NULL;
 	X509_free(trustedCertificate); trustedCertificate = NULL;
